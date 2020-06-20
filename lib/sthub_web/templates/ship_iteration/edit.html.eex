@@ -1,0 +1,5 @@
+<h1>Edit Ship iteration</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.ship_iteration_path(@conn, :update, @ship_iteration)) %>
+
+<span><%= link "Back", to: Routes.ship_iteration_path(@conn, :index) %></span>

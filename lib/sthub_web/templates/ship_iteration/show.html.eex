@@ -1,0 +1,18 @@
+<h1>Show Ship iteration</h1>
+
+<ul>
+
+  <li>
+    <strong>Iteration:</strong>
+    <%= @ship_iteration.iteration %>
+  </li>
+
+  <li>
+    <strong>Active:</strong>
+    <%= @ship_iteration.active %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.ship_iteration_path(@conn, :edit, @ship_iteration) %></span>
+<span><%= link "Back", to: Routes.ship_iteration_path(@conn, :index) %></span>

@@ -1,0 +1,28 @@
+<h1>Listing Wows ship iterations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Iteration</th>
+      <th>Active</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for ship_iteration <- @wows_ship_iterations do %>
+    <tr>
+      <td><%= ship_iteration.iteration %></td>
+      <td><%= ship_iteration.active %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.ship_iteration_path(@conn, :show, ship_iteration) %></span>
+        <span><%= link "Edit", to: Routes.ship_iteration_path(@conn, :edit, ship_iteration) %></span>
+        <span><%= link "Delete", to: Routes.ship_iteration_path(@conn, :delete, ship_iteration), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Ship iteration", to: Routes.ship_iteration_path(@conn, :new) %></span>
