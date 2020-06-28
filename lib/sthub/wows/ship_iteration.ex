@@ -6,15 +6,15 @@ defmodule StHub.Wows.ShipIteration do
     field :active, :boolean, default: false
     field :iteration, :integer
     belongs_to :ship, StHub.Wows.Ship
+    has_many :changes, StHub.Wows.ShipIterationChange
 
     timestamps()
   end
 
-  @doc false
   def changeset(ship_iteration, attrs) do
     ship_iteration
-    |> cast(attrs, [:iteration, :active])
-    |> cast_assoc(:ship)
-    |> validate_required([:iteration, :active, :ship_id])
+    |> cast(attrs, [:active])
+    |> cast_assoc(:changes, with: &StHub.Wows.ShipIterationChange.changeset/2)
+    |> validate_required([:active])
   end
 end

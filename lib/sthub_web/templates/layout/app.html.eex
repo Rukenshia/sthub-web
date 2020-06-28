@@ -32,21 +32,11 @@
         </div>
         <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
           <div class="flex-shrink-0 flex items-center px-4">
-            <img class="h-8 w-auto" src="/img/logos/workflow-logo-on-dark.svg" alt="Workflow" />
+            StHub
           </div>
           <nav class="mt-5 px-2">
-            <a href="<%= Routes.page_path(@conn, :index) %>" class="group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-white bg-gray-900 focus:outline-none focus:bg-gray-700 transition ease-in-out duration-150">
-              <svg class="mr-4 h-6 w-6 text-gray-300 group-hover:text-gray-300 group-focus:text-gray-300 transition ease-in-out duration-150" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-              </svg>
-              Dashboard
-            </a>
-            <a href="<%= Routes.wows_path(@conn, :index) %>" class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition ease-in-out duration-150">
-              <svg class="mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-300 group-focus:text-gray-300 transition ease-in-out duration-150" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-              </svg>
-              Ship database
-            </a>
+            <%= navitem(@conn, StHubWeb.PageView, Routes.page_path(@conn, :index), :index) %>
+            <%= navitem(@conn, StHubWeb.WowsView, Routes.wows_path(@conn, :index), :index) %>
           </nav>
         </div>
         <div class="flex-shrink-0 flex bg-gray-700 p-4">
@@ -76,22 +66,12 @@
   <div class="hidden md:flex md:flex-shrink-0">
     <div class="flex flex-col w-64 bg-gray-800">
       <div class="h-0 flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-        <div class="flex items-center flex-shrink-0 px-4">
-          <img class="h-8 w-auto" src="/img/logos/workflow-logo-on-dark.svg" alt="Workflow" />
+        <div class="flex items-center flex-shrink-0 px-4 font-mono text-indigo-300 font-medium">
+          StHub
         </div>
         <nav class="mt-5 flex-1 px-2 bg-gray-800">
-          <a href="<%= Routes.page_path(@conn, :index) %>" class="group flex items-center px-2 py-2 text-sm leading-5 font-medium text-white rounded-md bg-gray-900 focus:outline-none focus:bg-gray-700 transition ease-in-out duration-150">
-            <svg class="mr-3 h-6 w-6 text-gray-300 group-hover:text-gray-300 group-focus:text-gray-300 transition ease-in-out duration-150" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-            </svg>
-            Dashboard
-          </a>
-          <a href="<%= Routes.wows_path(@conn, :index) %>" class="mt-1 group flex items-center px-2 py-2 text-sm leading-5 font-medium text-gray-300 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition ease-in-out duration-150">
-            <svg class="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-300 group-focus:text-gray-300 transition ease-in-out duration-150" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            Ship database
-          </a>
+          <%= navitem(@conn, StHubWeb.PageView, Routes.page_path(@conn, :index), :index) %>
+          <%= navitem(@conn, StHubWeb.WowsView, Routes.wows_path(@conn, :index), :index) %>
         </nav>
       </div>
       <div class="flex-shrink-0 flex bg-gray-700 p-4">
@@ -125,7 +105,12 @@
     </div>
     <main class="flex-1 relative z-0 overflow-y-auto pt-2 pb-6 focus:outline-none md:py-6 bg-gray-100" tabindex="0">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-2xl font-semibold text-gray-900">Dashboard
+        <h1 class="text-2xl font-semibold text-gray-900">
+          <%= if Kernel.function_exported?(@view_module, :title, 2) do %>
+            <%= @view_module.title(Phoenix.Controller.action_name(@conn), @conn.assigns) %>
+          <% else %>
+            StHub
+          <% end %>
         </h1>
       </div>
 

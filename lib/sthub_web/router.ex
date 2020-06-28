@@ -28,11 +28,10 @@ defmodule StHubWeb.Router do
 
           scope "/iterations" do
             get "/new", ShipIterationController, :new
+            get "/:iteration_id", ShipIterationController, :show
           end
         end
       end
-
-      resources "/iterations", ShipIterationController
     end
   end
 

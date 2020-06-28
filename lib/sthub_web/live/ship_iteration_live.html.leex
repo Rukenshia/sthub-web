@@ -1,0 +1,94 @@
+<%= form_for @changeset, "#", [phx_change: :validate, phx_submit: :save], fn f -> %>
+  <div class="mt-4 flex gap-2">
+    <div>
+      <%= label f, :ship_id, class: "block text-sm font-medium leading-5 text-gray-700" %>
+      <div class="mt-1 relative rounded-md shadow-sm">
+        <%= number_input f, :ship_id, class: "form-input block w-full sm:text-sm sm:leading-5 bg-gray-200", disabled: true %>
+      </div>
+      <%= error_tag f, :ship_id %>
+    </div>
+
+    <div>
+      <%= label f, :iteration, class: "block text-sm font-medium leading-5 text-gray-700" %>
+      <div class="mt-1 relative rounded-md shadow-sm">
+        <%= number_input f, :iteration, class: "form-input block w-full sm:text-sm sm:leading-5 bg-gray-200", disabled: true %>
+      </div>
+      <%= error_tag f, :iteration %>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <div class="flex gap-2">
+      <div>
+        <%= label f, :active, class: "text-sm font-medium leading-5 text-gray-700" %>
+      </div>
+      <div>
+        <%= checkbox f, :active %>
+      </div>
+    </div>
+    <%= error_tag f, :active %>
+  </div>
+
+  <div class="mt-4">
+    <h2 class="text-xl leading-8">Changes</h2>
+
+    <%= inputs_for f, :changes, fn c -> %>
+      <div class="mt-4 flex gap-2">
+        <div>
+          <%= label c, :parameter_id, "Ship Parameter", class: "block text-sm font-medium leading-5 text-gray-700" %>
+          <%= select c,
+            :parameter_id,
+            @parameters |> Enum.map(fn p -> [key: p.friendly_name, value: p.id] end),
+            class: "mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            %>
+          <%= error_tag c, :parameter_id %>
+        </div>
+
+        <% with true <- Map.has_key?(c.source.changes, :parameter_id),
+                 parameter = %ShipParameter{} <- Enum.find(@parameters, fn p -> p.id == c.source.changes.parameter_id end) do %>
+          <%= if parameter.needs_additional_info do %>
+            <div>
+              <%= label c, :additional_info, "Additional info (e.g. Consumable Type)", class: "block text-sm font-medium leading-5 text-gray-700" %>
+              <div class="mt-1 relative rounded-md shadow-sm">
+                <%= text_input c, :additional_info, class: "form-input block w-full sm:text-sm sm:leading-5" %>
+              </div>
+              <%= error_tag c, :additional_info %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <div class="flex-shrink">
+          <%= label c, :from, class: "block text-sm font-medium leading-5 text-gray-700" %>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <%= text_input c, :from, class: "form-input block w-full sm:text-sm sm:leading-5" %>
+          </div>
+          <%= error_tag c, :from %>
+        </div>
+
+        <div class="flex-shrink">
+          <%= label c, :to, class: "block text-sm font-medium leading-5 text-gray-700" %>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <%= text_input c, :to, class: "form-input block w-full sm:text-sm sm:leading-5" %>
+          </div>
+          <%= error_tag c, :to %>
+        </div>
+
+        <div class="flex-grow">
+          <%= label c, :full_change_text, "Full change text", class: "block text-sm font-medium leading-5 text-gray-700" %>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <%= text_input c, :full_change_text, class: "form-input block w-full sm:text-sm sm:leading-5" %>
+          </div>
+          <%= error_tag c, :full_change_text %>
+        </div>
+      </div>
+    <% end %>
+
+    <a class="mt-4 inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm leading-4 font-medium rounded text-indigo-700 bg-white hover:bg-gray-50 hover:border-indigo-500 border-indigo-300 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-gray-200 transition ease-in-out duration-150" phx-click="add_change">+ Add</a>
+  </div>
+
+  <div class="mt-4">
+    <span class="inline-flex rounded-md shadow-sm">
+      <%= submit "Save", class: "inline-flex items-center px-2.5 py-1.5 border border-transparent text-sm leading-4 font-medium rounded text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150" %>
+    </span>
+  </div>
+<% end %>

@@ -8,6 +8,7 @@ defmodule StHub.Wows do
   alias StHub.Repo
 
   alias StHub.Wows.ShipIteration
+  alias StHub.Wows.ShipIterationChange
   alias StHub.Wows.Ship
 
   @doc """
@@ -167,5 +168,18 @@ defmodule StHub.Wows do
   """
   def change_ship_iteration(%ShipIteration{} = ship_iteration, attrs \\ %{}) do
     ShipIteration.changeset(ship_iteration, attrs)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking ship_iteration_change changes.
+
+  ## Examples
+
+      iex> change_ship_iteration_change(ship_iteration_change)
+      %Ecto.Changeset{data: %ShipIteration{}}
+
+  """
+  def change_ship_iteration_change(%ShipIterationChange{} = ship_iteration_change, attrs \\ %{}) do
+    ShipIterationChange.changeset(ship_iteration_change, attrs)
   end
 end

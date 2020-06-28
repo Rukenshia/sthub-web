@@ -37,7 +37,7 @@ defmodule StHubWeb.ShipIterationController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"iteration_id" => id}) do
     ship_iteration = Wows.get_ship_iteration!(id)
     render(conn, "show.html", ship_iteration: ship_iteration)
   end
