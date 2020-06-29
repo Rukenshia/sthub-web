@@ -20,3 +20,6 @@ config :sthub, StHubWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :sthub,
+  http_adapter: StHub.Http.MockClient

@@ -1,13 +1,13 @@
 defmodule StHub.Wows.Api do
   require Logger
 
-  # @application_id Application.get_env(:sthub, StHub.Wows.Api)[:application]
-  @application_id "bf7fb7e1809acb24157245221cca089b"
+  @application_id Application.get_env(:sthub, StHub.Wows.Api)[:application]
+  @http_client Application.get_env(:sthub, :http_adapter)
 
   def get_warships(page, ships) do
     %{status_code: 200} =
       response =
-      HTTPoison.get!("https://api.worldofwarships.eu/wows/encyclopedia/ships/", [],
+      @http_client.get!("https://api.worldofwarships.eu/wows/encyclopedia/ships/", [],
         params: %{application_id: @application_id, page_no: page}
       )
 
@@ -29,7 +29,7 @@ defmodule StHub.Wows.Api do
   def get_warships() do
     %{status_code: 200} =
       response =
-      HTTPoison.get!("https://api.worldofwarships.eu/wows/encyclopedia/ships/", [],
+      @http_client.get!("https://api.worldofwarships.eu/wows/encyclopedia/ships/", [],
         params: %{application_id: @application_id}
       )
 

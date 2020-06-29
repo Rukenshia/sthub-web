@@ -11,6 +11,11 @@ config :sthub,
   namespace: StHub,
   ecto_repos: [StHub.Repo]
 
+config :sthub,
+  http_adapter: StHub.Http.Client
+
+config :sthub, StHub.Wows.Api, application: "bf7fb7e1809acb24157245221cca089b"
+
 # Configures the endpoint
 config :sthub, StHubWeb.Endpoint,
   url: [host: "localhost"],
