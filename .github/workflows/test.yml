@@ -1,0 +1,42 @@
+name: test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    env:
+      MIX_ENV: test
+      POSTGRES_HOST: postgres
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: download
+      uses: actions/setup-elixir@v1
+      with:
+        elixir-version: '1.9.4' # Define the elixir version [required]
+        otp-version: '22.2' # Define the OTP version [required]
+    - name: install dependencies
+      run: mix deps.get
+    - name: compile
+      run: mix compile
+    - name: run tests
+      run: mix test
