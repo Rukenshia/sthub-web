@@ -6,8 +6,8 @@ defmodule StHub.WowsTest do
   describe "wows_ship_iterations" do
     alias StHub.Wows.ShipIteration
 
-    @valid_attrs %{active: true, iteration: 42}
-    @update_attrs %{active: false, iteration: 43}
+    @valid_attrs %{active: true}
+    @update_attrs %{active: false}
     @invalid_attrs %{active: nil, iteration: nil}
 
     def ship_iteration_fixture(attrs \\ %{}) do
@@ -32,7 +32,6 @@ defmodule StHub.WowsTest do
     test "create_ship_iteration/1 with valid data creates a ship_iteration" do
       assert {:ok, %ShipIteration{} = ship_iteration} = Wows.create_ship_iteration(@valid_attrs)
       assert ship_iteration.active == true
-      assert ship_iteration.iteration == 42
     end
 
     test "create_ship_iteration/1 with invalid data returns error changeset" do
@@ -41,14 +40,19 @@ defmodule StHub.WowsTest do
 
     test "update_ship_iteration/2 with valid data updates the ship_iteration" do
       ship_iteration = ship_iteration_fixture()
-      assert {:ok, %ShipIteration{} = ship_iteration} = Wows.update_ship_iteration(ship_iteration, @update_attrs)
+
+      assert {:ok, %ShipIteration{} = ship_iteration} =
+               Wows.update_ship_iteration(ship_iteration, @update_attrs)
+
       assert ship_iteration.active == false
-      assert ship_iteration.iteration == 43
     end
 
     test "update_ship_iteration/2 with invalid data returns error changeset" do
       ship_iteration = ship_iteration_fixture()
-      assert {:error, %Ecto.Changeset{}} = Wows.update_ship_iteration(ship_iteration, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Wows.update_ship_iteration(ship_iteration, @invalid_attrs)
+
       assert ship_iteration == Wows.get_ship_iteration!(ship_iteration.id)
     end
 
