@@ -44,7 +44,8 @@ defmodule StHubWeb.ShipIterationLive do
 
     ship_iteration = %ShipIteration{
       ship_id: ship_id,
-      iteration: next_iteration_id
+      iteration: next_iteration_id,
+      changes: []
     }
 
     {:ok,
@@ -70,16 +71,16 @@ defmodule StHubWeb.ShipIterationLive do
 
   def handle_event("add_change", _value, socket) do
     changes =
-      socket.assigns.ship_iteration.changes ++
-        Map.get(socket.assigns.changeset.changes, :changes, []) ++
-        [
-          StHub.Wows.change_ship_iteration_change(
-            %ShipIterationChange{
-              temp_id: get_random_id()
-            },
-            %{"parameter_id" => 1}
-          )
-        ]
+      [
+        StHub.Wows.change_ship_iteration_change(
+          %ShipIterationChange{
+            temp_id: get_random_id()
+          },
+          %{"parameter_id" => 1}
+        )
+      ] ++
+        socket.assigns.ship_iteration.changes ++
+        Map.get(socket.assigns.changeset.changes, :changes, [])
 
     changeset =
       socket.assigns.changeset
@@ -96,6 +97,34 @@ defmodule StHubWeb.ShipIterationLive do
       |> ShipIteration.changeset(params)
 
     {:noreply, assign(socket, :changeset, changeset)}
+  end
+
+  def get_parameter(parameters, changeset) do
+    parameter_id =
+      case changeset.data.parameter_id do
+        nil ->
+          case Map.has_key?(changeset.params, "parameter_id") do
+            true ->
+              changeset.params["parameter_id"]
+
+            false ->
+              Logger.debug("ASDASD")
+              changeset.source.changes.parameter_id
+          end
+
+        value ->
+          value
+      end
+
+    Logger.debug(inspect(parameter_id))
+
+    case Enum.find(parameters, fn p -> p.id == parameter_id end) do
+      nil ->
+        {:not_found, nil}
+
+      parameter ->
+        {:ok, parameter}
+    end
   end
 
   def get_random_id() do

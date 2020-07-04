@@ -7,7 +7,7 @@ defmodule StHubWeb.ShipController do
   def show(conn, %{"ship_id" => ship_id}) do
     ship =
       Wows.get_ship!(ship_id)
-      |> Repo.preload(:iterations)
+      |> Repo.preload(iterations: [changes: [:parameter]])
 
     render(conn, "show.html", ship: ship)
   end
