@@ -51,6 +51,33 @@
                 </p>
               </div>
 
+              <div class="mt-4">
+                <%= label c, :type, "Change type", class: "block text-sm font-medium leading-5 text-gray-700" %>
+                <div class="flex items-center mt-2 mb-2">
+                  <%= radio_button c, :type, "change", class: "form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" %>
+                  <label for="type" class="ml-3">
+                    <span class="block px-1 py-0.5 bg-gray-300 rounded text-sm leading-5 text-gray-700">
+                      change
+                    </span>
+                  </label>
+                </div>
+                <div class="flex items-center mt-2 mb-2">
+                  <%= radio_button c, :type, "buff", class: "form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" %>
+                  <label for="type" class="ml-3">
+                    <span class="block px-1 py0.5 bg-green-400 rounded text-sm leading-5 text-white">
+                      buff
+                    </span>
+                  </label>
+                </div><div class="flex items-center mt-2 mb-2">
+                  <%= radio_button c, :type, "nerf", class: "form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" %>
+                  <label for="type" class="ml-3">
+                    <span class="block px-1 py0.5 bg-red-400 rounded text-sm leading-5 text-white">
+                      nerf
+                    </span>
+                  </label>
+                </div>
+              </div>
+
               <% {has_parameter, parameter} = get_parameter(@parameters, c) %>
 
               <%= if has_parameter == :ok do %>

@@ -1,0 +1,139 @@
+<div class="md:flex md:items-center md:justify-between">
+  <div class="flex-1 min-w-0">
+    <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
+      Details for ship <%= @ship.name %>
+    </h2>
+  </div>
+  <div class="mt-4 flex md:mt-0 md:ml-4">
+    <span class="shadow-sm rounded-md">
+      <%# <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:text-gray-800 active:bg-gray-50 transition duration-150 ease-in-out">
+        Edit
+      </button> %>
+    </span>
+  </div>
+</div>
+
+<div class="mt-4 bg-white shadow overflow-hidden  sm:rounded-lg">
+  <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+    <div class="flex items-end justify-between">
+      <div>
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+          Ship Information
+        </h3>
+        <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+          This panel contains ship information grabbed from the World of Warships api. Additional configuration for
+          test ship iterations can be found below.
+        </p>
+      </div>
+      <div class="flex-shrink w-1/3 md:w-1/4 lg:w-1/6 -mt-8 -mb-2">
+        <img src="<%= @ship.additional_data["images"]["medium"] %>" />
+      </div>
+    </div>
+  </div>
+  <div class="px-4 py-5 sm:p-0">
+    <dl>
+      <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Ship Name
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @ship.name %>
+        </dd>
+      </div>
+      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          ID
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @ship.id %>
+        </dd>
+      </div>
+      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Type
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @ship.type %>
+        </dd>
+      </div>
+      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Nation
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @ship.nation %>
+        </dd>
+      </div>
+      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Tier
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          <%= @ship.tier %>
+        </dd>
+      </div>
+      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Development Status
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          <form phx-change="update_status">
+            <select name="ship_status" class="form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
+              <option value="unreleased" <%= if not @ship.released && not @ship.credited_to_testers do %>selected<% end %>>in development</option>
+              <option value="credited" <%= if @ship.credited_to_testers do %>selected<% end %>>credited to testers</option>
+              <option value="released" <%= if @ship.released do %>selected<% end %>>released</option>
+            </select>
+          </form>
+        </dd>
+      </div>
+      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Change History
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          <div class="relative w-3/4 -ml-2">
+            <div class="border-r-2 border-gray-200 absolute h-full top-0 z-0" style="left: 15px"></div>
+            <ul class="list-none m-0 p-0">
+              <%= for {iteration, index} <- Enum.with_index(@ship.iterations) do %>
+                <li class="mb-4">
+                  <div class="flex items-center mb-1">
+                    <div class="bg-gray-400 rounded-full ml-1 h-6 w-6 z-10"></div>
+                    <div class="flex-1 ml-4 font-medium">
+                      Iteration #<%= iteration.iteration %> <%= if index == length(@ship.iterations) - 1 do %>(current)<% end %>
+
+                      <%= link "Details", to: Routes.ship_iteration_path(StHubWeb.Endpoint, :show, @ship.id, iteration.id), class: "text-indigo-600 hover:text-indigo-900" %>
+                    </div>
+                  </div>
+                </li>
+                <%= if length(iteration.changes) == 0 do %>
+                  <li class="mb-4">
+                    <div class="flex items-center mb-2">
+                      <div class="bg-gray-200 rounded-full ml-2 h-4 w-4"></div>
+                      <div class="flex-1 ml-4">
+                        <%= link "Add changes to this iteration", to: Routes.ship_iteration_path(StHubWeb.Endpoint, :show, @ship.id, iteration.id), class: "text-indigo-600 hover:text-indigo-900" %>
+                      </div>
+                    </div>
+                  </li>
+                <% end %>
+                <%= for change <- iteration.changes do %>
+                <li class="mb-4">
+                  <div class="flex items-center mb-2">
+                    <div class="bg-gray-200 rounded-full ml-2 h-4 w-4"></div>
+                    <div class="flex-1 ml-4">
+                      <strong><%= change.parameter.friendly_name %></strong> changed from <%= change.from %><%= change.parameter.unit %> to <%= change.to %><%= change.parameter.unit %>
+                    </div>
+                  </div>
+                </li>
+                <% end %>
+              <% end %>
+            </ul>
+          </div>
+
+          <span class="mt-4 inline-flex rounded-md shadow-sm">
+            <%= link "Create new iteration", to: Routes.ship_iteration_path(StHubWeb.Endpoint, :new, @ship.id, %{}), class: "inline-flex items-center px-2 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150" %>
+          </span>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>

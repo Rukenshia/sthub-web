@@ -74,9 +74,10 @@ defmodule StHubWeb.ShipIterationLive do
       [
         StHub.Wows.change_ship_iteration_change(
           %ShipIterationChange{
-            temp_id: get_random_id()
+            temp_id: get_random_id(),
+            type: "change"
           },
-          %{"parameter_id" => 1}
+          %{"parameter_id" => "1"}
         )
       ] ++
         socket.assigns.ship_iteration.changes ++
@@ -106,9 +107,9 @@ defmodule StHubWeb.ShipIterationLive do
           case Map.has_key?(changeset.params, "parameter_id") do
             true ->
               changeset.params["parameter_id"]
+              |> String.to_integer()
 
             false ->
-              Logger.debug("ASDASD")
               changeset.source.changes.parameter_id
           end
 
@@ -116,13 +117,13 @@ defmodule StHubWeb.ShipIterationLive do
           value
       end
 
-    Logger.debug(inspect(parameter_id))
-
     case Enum.find(parameters, fn p -> p.id == parameter_id end) do
       nil ->
+        Logger.debug("not found")
         {:not_found, nil}
 
       parameter ->
+        Logger.debug("found")
         {:ok, parameter}
     end
   end

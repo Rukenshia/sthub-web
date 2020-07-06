@@ -5,6 +5,7 @@ defmodule StHub.Repo.Migrations.CreateWowsShipIterationChanges do
     create table(:wows_ship_iteration_changes) do
       add :ship_iteration_id, references(:wows_ship_iterations, on_delete: :nothing)
       add :parameter_id, references(:wows_ship_parameters)
+      add :type, :string
       add :from, :string, null: true
       add :to, :string, null: true
       add :additional_info, :string, null: true

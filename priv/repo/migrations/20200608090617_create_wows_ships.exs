@@ -8,6 +8,13 @@ defmodule StHub.Repo.Migrations.CreateWowsShips do
       add :nation, :string
       add :tier, :integer
       add :type, :string
+
+      # test ship data
+      add :released, :boolean
+      add :released_at, :naive_datetime
+      add :credited_to_testers, :boolean
+
+      # wows api data
       add :additional_data, :map
 
       timestamps()

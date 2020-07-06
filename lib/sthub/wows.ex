@@ -22,7 +22,9 @@ defmodule StHub.Wows do
       case Repo.get(StHub.Wows.Ship, c["ship_id"]) do
         nil ->
           %StHub.Wows.Ship{
-            id: c["ship_id"]
+            id: c["ship_id"],
+            released: false,
+            credited_to_testers: false,
           }
           |> StHub.Wows.Ship.changeset(%{
             name: c["name"],

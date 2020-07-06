@@ -5,6 +5,7 @@ defmodule StHub.Wows.ShipIterationChange do
   schema "wows_ship_iteration_changes" do
     field :ship_iteration_id, :id
     belongs_to(:parameter, StHub.Wows.ShipParameter)
+    field :type, :string
     field :from, :string
     field :to, :string
     field :additional_info, :string
@@ -19,7 +20,7 @@ defmodule StHub.Wows.ShipIterationChange do
   @doc false
   def changeset(ship_iteration_change, attrs) do
     ship_iteration_change
-    |> cast(attrs, [:parameter_id, :from, :to, :additional_info, :full_change_text])
-    |> validate_required([:parameter_id, :full_change_text])
+    |> cast(attrs, [:parameter_id, :type, :from, :to, :additional_info, :full_change_text])
+    |> validate_required([:parameter_id, :type, :full_change_text])
   end
 end

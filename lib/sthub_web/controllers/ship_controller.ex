@@ -5,10 +5,6 @@ defmodule StHubWeb.ShipController do
   alias StHub.Wows
 
   def show(conn, %{"ship_id" => ship_id}) do
-    ship =
-      Wows.get_ship!(ship_id)
-      |> Repo.preload(iterations: [changes: [:parameter]])
-
-    render(conn, "show.html", ship: ship)
+    render(conn, "show.html", ship_id: ship_id)
   end
 end
