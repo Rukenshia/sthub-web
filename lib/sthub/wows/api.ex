@@ -43,4 +43,18 @@ defmodule StHub.Wows.Api do
       ships
     end
   end
+
+  def get_game_version() do
+    ConCache.get_or_store(:wows_api, :game_version, fn ->
+      %{status_code: 200} =
+        response =
+        @http_client.get!("https://api.worldofwarships.eu/wows/encyclopedia/info/", [],
+          params: %{application_id: @application_id, fields: "game_version"}
+        )
+
+      %{"status" => "ok"} = data = Jason.decode!(response.body)
+
+      %ConCache.Item{ttl: :timer.hours(1), value: data["data"]["game_version"]}
+    end)
+  end
 end

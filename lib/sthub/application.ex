@@ -14,9 +14,10 @@ defmodule StHub.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: StHub.PubSub},
       # Start the Endpoint (http/https)
-      StHubWeb.Endpoint
+      StHubWeb.Endpoint,
       # Start a worker by calling: StHub.Worker.start_link(arg)
       # {StHub.Worker, arg}
+      {ConCache, [name: :wows_api, ttl_check_interval: false]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

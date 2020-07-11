@@ -14,6 +14,17 @@ defmodule StHubWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/api", StHubWeb do
+    pipe_through :api
+
+    scope "/wows" do
+      scope "/testing" do
+        get "/game_version", WowsController, :api_show_wows_version
+        get "/ships", ShipController, :api_index_testships
+      end
+    end
+  end
+
   scope "/", StHubWeb do
     pipe_through :browser
 

@@ -61,7 +61,11 @@ defmodule StHubWeb.ShipIterationLive do
   end
 
   def handle_event("save", _value, socket) do
-    {:ok, iteration} = Repo.insert_or_update(socket.assigns.changeset, on_conflict: :replace_all)
+    {:ok, iteration} =
+      Repo.insert_or_update(socket.assigns.changeset,
+        on_conflict: :replace_all,
+        conflict_target: :id
+      )
 
     {:noreply,
      socket
