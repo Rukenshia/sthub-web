@@ -32,6 +32,11 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Guardian config
+config :sthub, StHub.UserManager.Guardian,
+  issuer: "sthub",
+  secret_key: "WkSn0BKg/qjf5+2tvR3iTl7bGNCq7xSL1d/oZee4CVdkiiINVWqWC3JgVeaEG7Xc"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

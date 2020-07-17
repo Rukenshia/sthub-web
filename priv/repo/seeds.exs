@@ -13,7 +13,6 @@ alias StHub.Repo
 alias StHub.Wows.ShipParameter
 
 defmodule SeedHelper do
-
   def ship_param(friendly_name, value_type, options \\ []) do
     default_options = [unit: nil, needs_additional_info: false]
     options = Keyword.merge(default_options, options) |> Enum.into(%{})
@@ -27,7 +26,7 @@ defmodule SeedHelper do
       friendly_name: friendly_name,
       value_type: value_type,
       unit: unit,
-      needs_additional_info: needs_additional_info,
+      needs_additional_info: needs_additional_info
     }
   end
 
@@ -40,12 +39,10 @@ defmodule SeedHelper do
 
       # Survivability
       ship_param("Health Pool", "integer"),
-
       ship_param("Bow Plating", "integer", unit: "mm"),
       ship_param("Stern Plating", "integer", unit: "mm"),
       ship_param("Deck Plating", "integer", unit: "mm"),
       ship_param("Armor Plating (Other)", "integer", unit: "mm"),
-
       ship_param("Fire Duration", "integer", unit: "s"),
       ship_param("Flooding Duration", "integer", unit: "s"),
 
@@ -54,17 +51,13 @@ defmodule SeedHelper do
       ship_param("Sight Alignment Time", "more_less"),
       ship_param("Attack Time Preparation", "float", unit: "s"),
       ship_param("Attack Time", "integer", unit: "s"),
-
       ship_param("AP Rocket Damage", "integer"),
       ship_param("AP Rocket Flight Time", "more_less"),
       ship_param("AP Rocket Ricochet Angle", "integer", unit: "°"),
-
       ship_param("HE Rocket Damage", "integer"),
       ship_param("HE Rocket Flight Time", "more_less"),
-
       ship_param("AP Bomb Damage", "integer"),
       ship_param("AP Bomb Flight Time", "more_less"),
-
       ship_param("HE Bomb Damage", "integer"),
       ship_param("HE Bomb Flight Time", "more_less"),
 
@@ -78,23 +71,18 @@ defmodule SeedHelper do
       # Main Armament
       ship_param("Main Battery Reload Time", "float", unit: "s"),
       ship_param("Turret Traverse Speed", "float", unit: "°/s"),
-
       ship_param("Sigma", "float"),
       ship_param("Maximum Dispersion", "integer", unit: "m"),
-
       ship_param("AP Shell Damage", "integer"),
       ship_param("AP Shell Velocity", "integer", unit: "m/s"),
       ship_param("AP Ricochet Angle", "integer", unit: "°"),
-
       ship_param("SAP Shell Damage", "integer"),
       ship_param("SAP Shell Velocity", "integer", unit: "m/s"),
       ship_param("SAP Ricochet Angle", "integer", unit: "°"),
-
       ship_param("HE Shell Damage", "integer"),
       ship_param("HE Shell Velocity", "integer", unit: "m/s"),
       ship_param("HE Shell Penetration", "integer", unit: "mm"),
       ship_param("HE Shell Fire Chance", "integer", unit: "%"),
-
       ship_param("Shell Balistics", "more_less"),
 
       # Secondary Armament
@@ -122,3 +110,11 @@ SeedHelper.get_ship_parameters()
 |> Enum.each(&Repo.insert!/1)
 
 StHub.Wows.update_ship_database()
+
+user =
+  %StHub.UserManager.User{}
+  |> StHub.UserManager.User.changeset(%{
+    "username" => "test",
+    "password" => "test"
+  })
+  |> Repo.insert!()

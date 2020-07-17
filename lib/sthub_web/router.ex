@@ -1,6 +1,14 @@
 defmodule StHubWeb.Router do
   use StHubWeb, :router
 
+  pipeline :auth do
+    plug StHub.UserManager.Pipeline
+  end
+
+  pipeline :ensure_auth do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -26,9 +34,13 @@ defmodule StHubWeb.Router do
   end
 
   scope "/", StHubWeb do
-    pipe_through :browser
+    pipe_through [:browser, :auth]
 
     get "/", PageController, :index
+
+    get "/login", SessionController, :new
+    post "/login", SessionController, :login
+    get "/logout", SessionController, :logout
 
     scope "/wows" do
       scope "/ships" do

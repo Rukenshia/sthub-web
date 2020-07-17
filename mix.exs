@@ -48,7 +48,9 @@ defmodule StHub.MixProject do
       {:httpoison, "~> 1.6"},
       {:phoenix_live_view, "~> 0.13.2"},
       {:floki, ">= 0.0.0", only: :test},
-      {:con_cache, "~> 0.13"}
+      {:con_cache, "~> 0.13"},
+      {:guardian, "~> 2.0"},
+      {:argon2_elixir, "~> 2.0"}
     ]
   end
 
