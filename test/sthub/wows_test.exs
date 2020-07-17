@@ -15,7 +15,8 @@ defmodule StHub.WowsTest do
       changes: [
         %{
           "parameter_id" => 1,
-          "full_change_text" => "A change"
+          "full_change_text" => "A change",
+          "type" => "buff",
         }
       ]
     }
@@ -24,7 +25,8 @@ defmodule StHub.WowsTest do
       changes: [
         %{
           "parameter_id" => 1,
-          "full_change_text" => "A change"
+          "full_change_text" => "A change",
+          "type" => "buff",
         }
       ]
     }
