@@ -3,8 +3,8 @@ defmodule StHub.Wows.ShipIteration do
   import Ecto.Changeset
 
   schema "wows_ship_iterations" do
-    field :active, :boolean, default: false
     field :iteration, :integer
+    field :game_version, :string
     belongs_to :ship, StHub.Wows.Ship
     has_many :changes, StHub.Wows.ShipIterationChange
 
@@ -13,8 +13,8 @@ defmodule StHub.Wows.ShipIteration do
 
   def changeset(ship_iteration, attrs) do
     ship_iteration
-    |> cast(attrs, [:active])
+    |> cast(attrs, [:game_version])
     |> cast_assoc(:changes, with: &StHub.Wows.ShipIterationChange.changeset/2)
-    |> validate_required([:active])
+    |> validate_required([:game_version])
   end
 end

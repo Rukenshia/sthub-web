@@ -15,18 +15,14 @@
       </div>
       <%= error_tag f, :iteration %>
     </div>
-  </div>
 
-  <div class="mt-4">
-    <div class="flex gap-2">
-      <div>
-        <%= label f, :active, class: "text-sm font-medium leading-5 text-gray-700" %>
+    <div>
+      <%= label f, :game_version, class: "block text-sm font-medium leading-5 text-gray-700" %>
+      <div class="mt-1 relative rounded-md shadow-sm">
+        <%= text_input f, :game_version, class: "form-input block w-full sm:text-sm sm:leading-5" %>
       </div>
-      <div>
-        <%= checkbox f, :active %>
-      </div>
+      <%= error_tag f, :game_version %>
     </div>
-    <%= error_tag f, :active %>
   </div>
 
   <div class="mt-4">

@@ -78,6 +78,19 @@ defmodule StHubWeb.ShipLive do
     false
   end
 
+  def change_dot_color(change) do
+    case change.type do
+      "buff" ->
+        "bg-green-400"
+
+      "nerf" ->
+        "bg-red-400"
+
+      _ ->
+        "bg-gray-200"
+    end
+  end
+
   def ship_status_text(ship) do
     cond do
       ship.released ->

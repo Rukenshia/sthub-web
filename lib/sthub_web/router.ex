@@ -9,6 +9,10 @@ defmodule StHubWeb.Router do
     plug Guardian.Plug.EnsureAuthenticated
   end
 
+  pipeline :ensure_admin do
+    plug StHub.UserManager.EnsureAdministrator
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -55,6 +59,12 @@ defmodule StHubWeb.Router do
           end
         end
       end
+    end
+
+    scope "/admin" do
+      pipe_through [:ensure_auth, :ensure_admin]
+
+      resources "/users", UserController
     end
   end
 

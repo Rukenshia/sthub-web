@@ -53,9 +53,7 @@ defmodule StHubWeb.ShipIterationLive do
      |> assign(:ship_iteration, ship_iteration)
      |> assign(
        :changeset,
-       Wows.change_ship_iteration(ship_iteration, %{
-         "active" => true
-       })
+       Wows.change_ship_iteration(ship_iteration, %{})
      )
      |> assign(:parameters, Repo.all(ShipParameter))}
   end
