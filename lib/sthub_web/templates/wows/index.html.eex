@@ -1,1 +1,1 @@
-<%= live_render(@conn, StHubWeb.WowsLive) %>
+<%= live_render(@conn, StHubWeb.WowsLive, session: %{"user_id" => @current_user_id}) %>

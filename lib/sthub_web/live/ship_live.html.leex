@@ -62,13 +62,17 @@
           Development Status
         </dt>
         <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-          <form phx-change="update_status">
-            <select name="ship_status" class="form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
-              <option value="unreleased" <%= if not @ship.released && not @ship.credited_to_testers do %>selected<% end %>>in development</option>
-              <option value="credited" <%= if @ship.credited_to_testers do %>selected<% end %>>credited to testers</option>
-              <option value="released" <%= if @ship.released do %>selected<% end %>>released</option>
-            </select>
-          </form>
+          <%= if user_can_change_status(@current_user) do %>
+            <form phx-change="update_status">
+              <select name="ship_status" class="form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
+                <option value="unreleased" <%= if not @ship.released && not @ship.credited_to_testers do %>selected<% end %>>in development</option>
+                <option value="credited" <%= if @ship.credited_to_testers do %>selected<% end %>>credited to testers</option>
+                <option value="released" <%= if @ship.released do %>selected<% end %>>released</option>
+              </select>
+            </form>
+          <% else %>
+            <%= ship_status_text(@ship) %>
+          <% end %>
         </dd>
       </div>
       <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
@@ -114,9 +118,11 @@
             </ul>
           </div>
 
-          <span class="mt-4 inline-flex rounded-md shadow-sm">
-            <%= link "Create new iteration", to: Routes.ship_iteration_path(StHubWeb.Endpoint, :new, @ship.id, %{}), class: "inline-flex items-center px-2 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150" %>
-          </span>
+          <%= if user_can_create_iteration(@current_user) do %>
+            <span class="mt-4 inline-flex rounded-md shadow-sm">
+              <%= link "Create new iteration", to: Routes.ship_iteration_path(StHubWeb.Endpoint, :new, @ship.id, %{}), class: "inline-flex items-center px-2 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150" %>
+            </span>
+          <% end %>
         </dd>
       </div>
     </dl>

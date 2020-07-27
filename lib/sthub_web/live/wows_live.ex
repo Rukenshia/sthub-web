@@ -13,8 +13,20 @@ defmodule StHubWeb.WowsLive do
     |> Repo.all()
   end
 
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :ships, get_ships())}
+  def mount(_params, %{"user_id" => user_id}, socket) do
+    user =
+      case user_id do
+        nil ->
+          nil
+
+        id ->
+          StHub.UserManager.get_user!(id)
+      end
+
+    {:ok,
+     socket
+     |> assign(:current_user, user)
+     |> assign(:ships, get_ships())}
   end
 
   def handle_event("update_ships", _value, socket) do
@@ -26,5 +38,17 @@ defmodule StHubWeb.WowsLive do
     :ok = StHub.Wows.update_ship_database()
 
     get_ships()
+  end
+
+  def user_can_refresh_ships(%StHub.UserManager.User{role: "administrator"}) do
+    true
+  end
+
+  def user_can_refresh_ships(%StHub.UserManager.User{role: "contributor"}) do
+    true
+  end
+
+  def user_can_refresh_ships(_) do
+    false
   end
 end

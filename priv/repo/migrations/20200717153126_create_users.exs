@@ -5,9 +5,9 @@ defmodule StHub.Repo.Migrations.CreateUsers do
     create table(:users) do
       add :username, :string
       add :password, :string
+      add :role, :string
 
       timestamps()
     end
-
   end
 end

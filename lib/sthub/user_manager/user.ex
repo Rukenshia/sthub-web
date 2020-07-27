@@ -6,6 +6,7 @@ defmodule StHub.UserManager.User do
   schema "users" do
     field :password, :string
     field :username, :string
+    field :role, :string
 
     timestamps()
   end

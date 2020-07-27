@@ -42,26 +42,6 @@ defmodule StHubWeb.ShipIterationController do
     render(conn, "show.html", ship_iteration: ship_iteration)
   end
 
-  def edit(conn, %{"id" => id}) do
-    ship_iteration = Wows.get_ship_iteration!(id)
-    changeset = Wows.change_ship_iteration(ship_iteration)
-    render(conn, "edit.html", ship_iteration: ship_iteration, changeset: changeset)
-  end
-
-  def update(conn, %{"id" => id, "ship_iteration" => ship_iteration_params}) do
-    ship_iteration = Wows.get_ship_iteration!(id)
-
-    case Wows.update_ship_iteration(ship_iteration, ship_iteration_params) do
-      {:ok, ship_iteration} ->
-        conn
-        |> put_flash(:info, "Ship iteration updated successfully.")
-        |> redirect(to: Routes.ship_iteration_path(conn, :show, ship_iteration))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", ship_iteration: ship_iteration, changeset: changeset)
-    end
-  end
-
   def delete(conn, %{"id" => id}) do
     ship_iteration = Wows.get_ship_iteration!(id)
     {:ok, _ship_iteration} = Wows.delete_ship_iteration(ship_iteration)
