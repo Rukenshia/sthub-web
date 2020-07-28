@@ -14,9 +14,10 @@ defmodule StHub.Release do
     Application.ensure_all_started(@app)
 
     alias StHub.Repo
-    alias StHub.Wows.ShipParameter
 
     defmodule SeedHelper do
+      alias StHub.Wows.ShipParameter
+
       def ship_param(friendly_name, value_type, options \\ []) do
         default_options = [unit: nil, needs_additional_info: false]
         options = Keyword.merge(default_options, options) |> Enum.into(%{})
@@ -115,7 +116,7 @@ defmodule StHub.Release do
 
     StHub.Wows.update_ship_database()
 
-    user =
+    _user =
       %StHub.UserManager.User{
         role: "administrator"
       }

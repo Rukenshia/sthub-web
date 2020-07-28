@@ -6,9 +6,13 @@ defmodule StHub.UserManagerTest do
   describe "users" do
     alias StHub.UserManager.User
 
-    @valid_attrs %{password: "some password", username: "some username"}
-    @update_attrs %{password: "some updated password", username: "some updated username"}
-    @invalid_attrs %{password: nil, username: nil}
+    @valid_attrs %{password: "some password", username: "some username", role: "administrator"}
+    @update_attrs %{
+      password: "some updated password",
+      username: "some updated username",
+      role: "user"
+    }
+    @invalid_attrs %{password: nil, username: nil, role: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =

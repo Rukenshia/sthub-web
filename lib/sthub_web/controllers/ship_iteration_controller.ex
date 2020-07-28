@@ -25,7 +25,7 @@ defmodule StHubWeb.ShipIterationController do
       {:ok, ship_iteration} ->
         conn
         |> put_flash(:info, "Ship iteration created successfully.")
-        |> redirect(to: Routes.ship_iteration_path(conn, :show, ship_iteration))
+        |> redirect(to: Routes.ship_iteration_path(conn, :show, ship_iteration.id))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

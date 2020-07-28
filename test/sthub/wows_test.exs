@@ -9,28 +9,28 @@ defmodule StHub.WowsTest do
 
     alias StHub.Repo
 
-    @valid_attrs %{active: true}
+    @valid_attrs %{game_version: "0.9.6.0"}
     @create_attrs_change %{
-      active: true,
+      game_version: "0.9.5.0",
       changes: [
         %{
           "parameter_id" => 1,
           "full_change_text" => "A change",
-          "type" => "buff",
+          "type" => "buff"
         }
       ]
     }
-    @update_attrs %{active: false}
+    @update_attrs %{game_version: "0.9.5.1"}
     @update_attrs_changes %{
       changes: [
         %{
           "parameter_id" => 1,
           "full_change_text" => "A change",
-          "type" => "buff",
+          "type" => "buff"
         }
       ]
     }
-    @invalid_attrs %{active: nil, iteration: nil}
+    @invalid_attrs %{game_version: nil, iteration: nil}
 
     def ship_iteration_fixture(attrs \\ %{}) do
       {:ok, ship_iteration} =
@@ -68,7 +68,7 @@ defmodule StHub.WowsTest do
 
     test "create_ship_iteration/1 with valid data creates a ship_iteration" do
       assert {:ok, %ShipIteration{} = ship_iteration} = Wows.create_ship_iteration(@valid_attrs)
-      assert ship_iteration.active == true
+      assert ship_iteration.game_version == "0.9.6.0"
     end
 
     test "create_ship_iteration/1 with embedded change data creates a ship_iteration" do
@@ -81,7 +81,7 @@ defmodule StHub.WowsTest do
         ship_iteration
         |> Repo.preload(:changes)
 
-      assert ship_iteration.active == true
+      assert ship_iteration.game_version == "0.9.5.0"
       assert ship_iteration.changes |> length() == 1
 
       assert ship_iteration.changes
@@ -100,7 +100,7 @@ defmodule StHub.WowsTest do
       assert {:ok, %ShipIteration{} = ship_iteration} =
                Wows.update_ship_iteration(ship_iteration, @update_attrs)
 
-      assert ship_iteration.active == false
+      assert ship_iteration.game_version == "0.9.5.1"
     end
 
     test "update_ship_iteration/2 with invalid data returns error changeset" do

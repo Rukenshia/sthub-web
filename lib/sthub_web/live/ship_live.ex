@@ -2,7 +2,6 @@ defmodule StHubWeb.ShipLive do
   require Logger
   use Phoenix.LiveView
   use Phoenix.HTML
-  import StHubWeb.ErrorHelpers
 
   alias StHub.Repo
   alias StHubWeb.Router.Helpers, as: Routes

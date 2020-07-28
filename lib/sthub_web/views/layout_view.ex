@@ -1,7 +1,6 @@
 defmodule StHubWeb.LayoutView do
   use StHubWeb, :view
   require Logger
-  alias Phoenix.Controller
 
   def page_title(conn) do
     case title_name(conn) do

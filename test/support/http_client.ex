@@ -2,7 +2,7 @@ defmodule StHub.Http.MockClient do
   def get!(
         "https://api.worldofwarships.eu/wows/encyclopedia/ships/",
         [],
-        [params: %{page_no: page_no}] = options
+        params: %{page_no: page_no}
       ) do
     ship = StHub.Wows.Api.TestData.encyclopedia_ships() |> Map.get(:"3761190896")
 
@@ -24,8 +24,8 @@ defmodule StHub.Http.MockClient do
 
   def get!(
         "https://api.worldofwarships.eu/wows/encyclopedia/ships/",
-        headers \\ [],
-        options \\ []
+        _headers,
+        _options
       ) do
     ship = StHub.Wows.Api.TestData.encyclopedia_ships() |> Map.get(:"3763255248")
 
