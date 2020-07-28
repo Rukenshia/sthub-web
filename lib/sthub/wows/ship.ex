@@ -60,6 +60,7 @@ defmodule StHub.Wows.Ship do
       "usa" -> "U.S."
       "europe" -> "European"
       "japan" -> "Japanese"
+      "italy" -> "Italian"
       v -> v
     end
   end
