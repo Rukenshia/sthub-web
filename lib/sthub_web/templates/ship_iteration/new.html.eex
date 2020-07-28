@@ -13,5 +13,4 @@
     </li>
   </ol>
 </nav>
-
-<%= live_render(@conn, StHubWeb.ShipIterationLive, session: %{"ship_id" => @ship.id}) %>
+<%= live_render(@conn, StHubWeb.ShipIterationLive, session: %{"ship_id" => @ship.id, "user_id" => @current_user_id}) %>

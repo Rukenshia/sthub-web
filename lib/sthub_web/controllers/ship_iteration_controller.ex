@@ -6,6 +6,15 @@ defmodule StHubWeb.ShipIterationController do
   alias StHub.Repo
 
   def new(conn, %{"ship_id" => ship_id}) do
+    user_id =
+      case Guardian.Plug.current_resource(conn) do
+        nil ->
+          nil
+
+        user ->
+          user.id
+      end
+
     ship = Wows.get_ship!(ship_id)
 
     changeset =
@@ -13,12 +22,7 @@ defmodule StHubWeb.ShipIterationController do
         ship_id: ship.id
       })
 
-    render(conn, "new.html", changeset: changeset, ship: ship)
-  end
-
-  def new(conn, %{}) do
-    changeset = Wows.change_ship_iteration(%ShipIteration{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, ship: ship, current_user_id: user_id)
   end
 
   def create(conn, %{"ship_iteration" => ship_iteration_params}) do
