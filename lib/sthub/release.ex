@@ -33,6 +33,9 @@ defmodule StHub.Release do
   end
 
   def seed_ship_parameters() do
+    load_app()
+    Application.ensure_all_started(@app)
+
     import StHub.SeedHelper
 
     [
