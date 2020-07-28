@@ -3,6 +3,7 @@ defmodule StHubWeb.ShipIterationController do
 
   alias StHub.Wows
   alias StHub.Wows.ShipIteration
+  alias StHub.Repo
 
   def new(conn, %{"ship_id" => ship_id}) do
     ship = Wows.get_ship!(ship_id)
@@ -42,7 +43,10 @@ defmodule StHubWeb.ShipIterationController do
           user.id
       end
 
-    ship_iteration = Wows.get_ship_iteration!(id)
+    ship_iteration =
+      Wows.get_ship_iteration!(id)
+      |> Repo.preload(:ship)
+
     render(conn, "show.html", ship_iteration: ship_iteration, current_user_id: user_id)
   end
 end
