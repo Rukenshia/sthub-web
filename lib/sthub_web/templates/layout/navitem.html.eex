@@ -1,23 +1,19 @@
 <a href="<%= @path %>"
-  class="group
-        flex
-        items-center
-        px-2
-        py-2
-        rounded-md
-        font-medium
+
+  class="
+    px-3
+    py-2
+    rounded-md
+    text-sm
+    font-medium
         <%= if @is_active do %>
           text-white
           bg-gray-900
-          text-base
-          leading-6
         <% else %>
           text-gray-300
           hover:text-white
           hover:bg-gray-700
           focus:text-white
-          text-sm
-          leading-5
         <% end %>
         focus:outline-none
         focus:bg-gray-700

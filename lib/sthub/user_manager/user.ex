@@ -15,8 +15,8 @@ defmodule StHub.UserManager.User do
 
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :password])
-    |> validate_required([:username, :password])
+    |> cast(attrs, [:username, :password, :role])
+    |> validate_required([:username, :password, :role])
     |> put_password_hash()
   end
 

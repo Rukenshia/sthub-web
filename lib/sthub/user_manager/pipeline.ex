@@ -10,4 +10,13 @@ defmodule StHub.UserManager.Pipeline do
   plug Guardian.Plug.VerifyHeader, claims: %{"typ" => "access"}
   # Load the user if either of the verifications worked
   plug Guardian.Plug.LoadResource, allow_blank: true
+
+  plug :set_current_user
+
+  def set_current_user(conn, _opts) do
+    user = Guardian.Plug.current_resource(conn)
+
+    conn
+    |> assign(:current_user, user)
+  end
 end

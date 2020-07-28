@@ -31,7 +31,7 @@ defmodule StHubWeb.SessionController do
 
   defp login_reply({:ok, user}, conn) do
     conn
-    |> put_flash(:info, "Welcome back!")
+    |> put_flash(:info, "Successfully logged in as #{user.username}")
     # This module's full name is Auth.UserManager.Guardian.Plug,
     |> Guardian.Plug.sign_in(user)
     # and the arguments specified in the Guardian.Plug.sign_in()

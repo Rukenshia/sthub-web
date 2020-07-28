@@ -1,1 +1,24 @@
-<em>Please select an item from the sidebar to continue</em>
+<h2 class="text-xl">Ships currently in testing</h2>
+<ul class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  <%= for ship <- @ships do %>
+    <li class="col-span-1 bg-white rounded-lg shadow">
+      <div class="w-full flex items-center justify-between p-6 space-x-6">
+        <div class="flex-1 truncate">
+          <div class="flex items-center space-x-3">
+            <h3 class="text-gray-900 text-sm leading-5 font-medium truncate"><%= ship.name %></h3>
+          </div>
+          <p class="mt-1 text-gray-500 text-sm leading-5 truncate">Tier <%= ship.additional_data["tier"] %> <%= ship.additional_data["nation"] %> <%= ship.additional_data["type"] %></p>
+        </div>
+        <img class="h-12 flex-shrink-0" src="<%= ship.additional_data["images"]["medium"] %>" alt="">
+      </div>
+      <div class="border-t border-gray-200">
+        <div class="-mt-px flex">
+          <div class="w-0 flex-1 flex">
+            <%= link "Details", to: Routes.ship_path(@conn, :show, ship), class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </li>
+<% end %>
+</ul>
