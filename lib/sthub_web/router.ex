@@ -13,6 +13,10 @@ defmodule StHubWeb.Router do
     plug StHub.UserManager.EnsureAdministrator
   end
 
+  pipeline :ensure_contributor do
+    plug StHub.UserManager.EnsureContributor
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -54,6 +58,8 @@ defmodule StHubWeb.Router do
           get "/", ShipController, :show
 
           scope "/iterations" do
+            pipe_through [:ensure_contributor]
+
             get "/new", ShipIterationController, :new
             get "/:iteration_id", ShipIterationController, :show
           end

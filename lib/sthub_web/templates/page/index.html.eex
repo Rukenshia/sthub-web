@@ -7,7 +7,7 @@
           <div class="flex items-center space-x-3">
             <h3 class="text-gray-900 text-sm leading-5 font-medium truncate"><%= ship.name %></h3>
           </div>
-          <p class="mt-1 text-gray-500 text-sm leading-5 truncate">Tier <%= ship.additional_data["tier"] %> <%= ship.additional_data["nation"] %> <%= ship.additional_data["type"] %></p>
+          <p class="mt-1 text-gray-500 text-sm leading-5 truncate">Tier <%= Ship.tier_name(ship) %> <%= Ship.nation_name(ship) %> <%= Ship.class_name(ship) %></p>
         </div>
         <img class="h-12 flex-shrink-0" src="<%= ship.additional_data["images"]["medium"] %>" alt="">
       </div>
@@ -18,7 +18,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </li>
-<% end %>
+    </li>
+  <% end %>
 </ul>

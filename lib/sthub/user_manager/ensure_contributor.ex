@@ -1,4 +1,4 @@
-defmodule StHub.UserManager.EnsureAdministrator do
+defmodule StHub.UserManager.EnsureContributor do
   import Plug.Conn
   alias Phoenix.Controller
 
@@ -14,6 +14,10 @@ defmodule StHub.UserManager.EnsureAdministrator do
 
       user ->
         case user.role do
+          "contributor" ->
+            conn
+
+          # Administrator overrides contributors
           "administrator" ->
             conn
 
