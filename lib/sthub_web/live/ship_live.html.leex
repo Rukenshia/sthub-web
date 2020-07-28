@@ -93,9 +93,7 @@
                           <div class="font-normal text-gray-500 absolute -ml-24"><%= iteration.game_version %>&nbsp;</span>
                         </div>
                       <% end %>
-
                       Iteration #<%= iteration.iteration %> <%= if index == length(@ship.iterations) - 1 do %>(current)<% end %>
-
                       <%= link "Details", to: Routes.ship_iteration_path(StHubWeb.Endpoint, :show, @ship.id, iteration.id), class: "text-indigo-600 hover:text-indigo-900" %>
                     </div>
                   </div>
@@ -111,23 +109,26 @@
                   </li>
                 <% end %>
                 <%= for change <- iteration.changes do %>
-                <li class="mb-4">
-                  <div class="flex items-center mb-2">
-                    <div class="<%= change_dot_color(change) %> z-10 rounded-full ml-2 h-4 w-4"></div>
-                    <div class="flex-1 ml-4">
-                      <strong>
-                        <%= change.parameter.friendly_name %>
-                      </strong>
-                      changed from <%= change.from %><%= change.parameter.unit %>
-                      to <%= change.to %><%= change.parameter.unit %>
+                  <li class="mb-4">
+                    <div class="flex items-center mb-2">
+                      <div class="<%= change_dot_color(change) %> z-10 rounded-full ml-2 h-4 w-4"></div>
+                      <div class="flex-1 ml-4">
+                        <strong>
+                          <%= if change.parameter.needs_additional_info do %>
+                            <%= change.additional_info %>
+                          <% else %>
+                            <%= change.parameter.friendly_name %>
+                          <% end %>
+                        </strong>
+                        changed from <%= change.from %><%= change.parameter.unit %>
+                        to <%= change.to %><%= change.parameter.unit %>
+                      </div>
                     </div>
-                  </div>
-                </li>
+                  </li>
                 <% end %>
               <% end %>
             </ul>
           </div>
-
           <%= if user_can_create_iteration(@current_user) do %>
             <span class="mt-4 inline-flex rounded-md shadow-sm">
               <%= link "Create new iteration", to: Routes.ship_iteration_path(StHubWeb.Endpoint, :new, @ship.id, %{}), class: "inline-flex items-center px-2 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150" %>
