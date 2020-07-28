@@ -81,9 +81,14 @@ defmodule StHubWeb.ShipIterationLive do
           },
           %{"parameter_id" => "1"}
         )
-      ] ++
-        socket.assigns.ship_iteration.changes ++
-        Map.get(socket.assigns.changeset.changes, :changes, [])
+      ]
+      |> Enum.concat(
+        Map.get(
+          socket.assigns.changeset.changes,
+          :changes,
+          socket.assigns.ship_iteration.changes
+        )
+      )
 
     changeset =
       socket.assigns.changeset
@@ -121,11 +126,9 @@ defmodule StHubWeb.ShipIterationLive do
 
     case Enum.find(parameters, fn p -> p.id == parameter_id end) do
       nil ->
-        Logger.debug("not found")
         {:not_found, nil}
 
       parameter ->
-        Logger.debug("found")
         {:ok, parameter}
     end
   end
