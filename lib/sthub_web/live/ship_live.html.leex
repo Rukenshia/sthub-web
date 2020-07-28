@@ -94,7 +94,11 @@
                         </div>
                       <% end %>
                       Iteration #<%= iteration.iteration %> <%= if index == length(@ship.iterations) - 1 do %>(current)<% end %>
-                      <%= link "Details", to: Routes.ship_iteration_path(StHubWeb.Endpoint, :show, @ship.id, iteration.id), class: "text-indigo-600 hover:text-indigo-900" %>
+
+
+                      <%= if user_can_update_iteration(@current_user) do %>
+                        <%= link "Details", to: Routes.ship_iteration_path(StHubWeb.Endpoint, :show, @ship.id, iteration.id), class: "text-indigo-600 hover:text-indigo-900" %>
+                      <% end %>
                     </div>
                   </div>
                 </li>

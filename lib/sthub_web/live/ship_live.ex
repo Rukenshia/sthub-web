@@ -77,6 +77,18 @@ defmodule StHubWeb.ShipLive do
     false
   end
 
+  def user_can_update_iteration(%StHub.UserManager.User{role: "administrator"}) do
+    true
+  end
+
+  def user_can_update_iteration(%StHub.UserManager.User{role: "contributor"}) do
+    true
+  end
+
+  def user_can_update_iteration(_) do
+    false
+  end
+
   def change_dot_color(change) do
     case change.type do
       "buff" ->
