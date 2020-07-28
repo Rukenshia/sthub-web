@@ -91,9 +91,10 @@
       </div>
     </div>
   </nav>
-  <header class="bg-white shadow">
+  <header id="header-wows-img" class="bg-black shadow h-18 overflow-hidden relative">
+    <img src="<%= Routes.static_path(@conn, "/images/header.jpg") %>" class="absolute object-cover" style="opacity: 0.2;" />
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold leading-tight text-gray-900">
+      <h1 class="text-3xl font-bold leading-tight text-white">
         <%= if Kernel.function_exported?(@view_module, :title, 2) do %>
           <%= @view_module.title(Phoenix.Controller.action_name(@conn), @conn.assigns) %>
         <% else %>
