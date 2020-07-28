@@ -120,8 +120,12 @@
                             <%= change.parameter.friendly_name %>
                           <% end %>
                         </strong>
-                        changed from <%= change.from %><%= change.parameter.unit %>
-                        to <%= change.to %><%= change.parameter.unit %>
+                        <%= if change.from && change.to do %>
+                          changed from <%= change.from %><%= change.parameter.unit %>
+                          to <%= change.to %><%= change.parameter.unit %>
+                        <% else %>
+                          has been changed
+                        <% end %>
                       </div>
                     </div>
                   </li>
