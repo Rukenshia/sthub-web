@@ -4,11 +4,6 @@ defmodule StHubWeb.ShipIterationController do
   alias StHub.Wows
   alias StHub.Wows.ShipIteration
 
-  def index(conn, _params) do
-    wows_ship_iterations = Wows.list_wows_ship_iterations()
-    render(conn, "index.html", wows_ship_iterations: wows_ship_iterations)
-  end
-
   def new(conn, %{"ship_id" => ship_id}) do
     ship = Wows.get_ship!(ship_id)
 
@@ -38,16 +33,16 @@ defmodule StHubWeb.ShipIterationController do
   end
 
   def show(conn, %{"iteration_id" => id}) do
-    ship_iteration = Wows.get_ship_iteration!(id)
-    render(conn, "show.html", ship_iteration: ship_iteration)
-  end
+    user_id =
+      case Guardian.Plug.current_resource(conn) do
+        nil ->
+          nil
 
-  def delete(conn, %{"id" => id}) do
-    ship_iteration = Wows.get_ship_iteration!(id)
-    {:ok, _ship_iteration} = Wows.delete_ship_iteration(ship_iteration)
+        user ->
+          user.id
+      end
 
-    conn
-    |> put_flash(:info, "Ship iteration deleted successfully.")
-    |> redirect(to: Routes.ship_iteration_path(conn, :index))
+    ship_iteration = Wows.get_ship_iteration!(id)
+    render(conn, "show.html", ship_iteration: ship_iteration, current_user_id: user_id)
   end
 end

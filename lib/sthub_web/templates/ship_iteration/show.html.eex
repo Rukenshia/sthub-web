@@ -1,3 +1,1 @@
-<h1>Show Ship iteration</h1>
-
-<%= live_render(@conn, StHubWeb.ShipIterationLive, session: %{"ship_id" => @ship_iteration.ship_id, "iteration_id" => @ship_iteration.id}) %>
+<%= live_render(@conn, StHubWeb.ShipIterationLive, session: %{"ship_id" => @ship_iteration.ship_id, "iteration_id" => @ship_iteration.id, "user_id" => @current_user_id}) %>

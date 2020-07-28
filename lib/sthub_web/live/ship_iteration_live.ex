@@ -12,7 +12,12 @@ defmodule StHubWeb.ShipIterationLive do
   alias StHub.Wows.ShipIteration
   alias StHub.Wows.ShipIterationChange
 
-  def mount(_, %{"ship_id" => _ship_id, "iteration_id" => iteration_id}, socket) do
+  def assign_user(socket, %{"user_id" => user_id}) do
+    socket
+    |> assign(:current_user, StHub.UserManager.get_user!(user_id))
+  end
+
+  def mount(_, %{"ship_id" => _ship_id, "iteration_id" => iteration_id} = params, socket) do
     ship_iteration =
       StHub.Wows.get_ship_iteration!(iteration_id)
       |> Repo.preload(:ship)
@@ -20,6 +25,7 @@ defmodule StHubWeb.ShipIterationLive do
 
     {:ok,
      socket
+     |> assign_user(params)
      |> assign(:ship_iteration, ship_iteration)
      |> assign(
        :changeset,
@@ -28,7 +34,7 @@ defmodule StHubWeb.ShipIterationLive do
      |> assign(:parameters, Repo.all(ShipParameter))}
   end
 
-  def mount(_, %{"ship_id" => ship_id}, socket) do
+  def mount(_, %{"ship_id" => ship_id} = params, socket) do
     ship =
       StHub.Wows.get_ship!(ship_id)
       |> Repo.preload(:iterations)
@@ -50,12 +56,29 @@ defmodule StHubWeb.ShipIterationLive do
 
     {:ok,
      socket
+     |> assign_user(params)
      |> assign(:ship_iteration, ship_iteration)
      |> assign(
        :changeset,
        Wows.change_ship_iteration(ship_iteration, %{})
      )
      |> assign(:parameters, Repo.all(ShipParameter))}
+  end
+
+  def handle_event("delete", _value, socket) do
+    with true <- can_delete_iteration(socket.assigns.current_user) do
+      {:ok, _} = Wows.delete_ship_iteration(socket.assigns.ship_iteration)
+
+      {:noreply,
+       socket
+       |> put_flash(:info, "Iteration has been deleted")
+       |> redirect(
+         to: Routes.ship_path(StHubWeb.Endpoint, :show, socket.assigns.ship_iteration.ship_id)
+       )}
+    else
+      _ ->
+        {:noreply, socket |> put_flash(:error, "Didn't work")}
+    end
   end
 
   def handle_event("save", _value, socket) do
@@ -142,5 +165,9 @@ defmodule StHubWeb.ShipIterationLive do
     |> :rand.uniform()
     |> Kernel.+(min)
     |> Integer.to_string(36)
+  end
+
+  def can_delete_iteration(user) do
+    user != nil && user.role == "administrator"
   end
 end
