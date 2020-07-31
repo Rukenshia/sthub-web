@@ -26,6 +26,8 @@ defmodule StHubWeb.ShipIterationLive do
     {:ok,
      socket
      |> assign_user(params)
+     |> assign(:parameter_search_results, %{})
+     |> assign(:parameter_search_inputs, %{})
      |> assign(:ship_iteration, ship_iteration)
      |> assign(
        :changeset,
@@ -57,6 +59,8 @@ defmodule StHubWeb.ShipIterationLive do
     {:ok,
      socket
      |> assign_user(params)
+     |> assign(:parameter_search_results, %{})
+     |> assign(:parameter_search_inputs, %{})
      |> assign(:ship_iteration, ship_iteration)
      |> assign(
        :changeset,
@@ -130,21 +134,77 @@ defmodule StHubWeb.ShipIterationLive do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
+  def handle_event("search", %{"id" => id, "value" => value}, socket) do
+    all_search_results =
+      Map.put(
+        socket.assigns.parameter_search_results,
+        id,
+        socket.assigns.parameters
+        |> Enum.map(fn p -> {p.id, p.friendly_name} end)
+        |> Enum.sort_by(fn {_, v} -> String.jaro_distance(v, value) end, :desc)
+        |> Enum.slice(0..5)
+      )
+
+    all_search_inputs =
+      Map.put(socket.assigns.parameter_search_inputs, String.to_integer(id), {0, value})
+
+    {:noreply,
+     socket
+     |> assign(:parameter_search_results, all_search_results)
+     |> assign(:parameter_search_inputs, all_search_inputs)}
+  end
+
+  def handle_event("apply-search", %{"id" => id, "parameter-id" => parameter_id}, socket) do
+    parameter =
+      Enum.find(socket.assigns.parameters, fn v -> v.id == String.to_integer(parameter_id) end)
+
+    # Update visuals
+    all_search_results = Map.delete(socket.assigns.parameter_search_results, id)
+
+    changeset = socket.assigns.changeset
+
+    changeset = Ecto.Changeset.put_change(
+      socket.assigns.changeset,
+      :changes,
+      List.replace_at(
+        socket.assigns.changeset.data.changes,
+        String.to_integer(id),
+        ShipIterationChange.changeset(
+          Enum.at(socket.assigns.changeset.data.changes, String.to_integer(id), nil),
+          %{"parameter_id" => "#{parameter.id}"})
+      )
+    )
+
+    all_search_inputs =
+      Map.put(
+        socket.assigns.parameter_search_inputs,
+        String.to_integer(id),
+        {parameter.id, parameter.friendly_name}
+      )
+
+
+    {:noreply,
+     socket
+     |> assign(:changeset, changeset)
+     |> assign(:parameter_search_results, all_search_results)
+     |> assign(:parameter_search_inputs, all_search_inputs)}
+  end
+
   def get_parameter(parameters, changeset) do
     parameter_id =
-      case changeset.data.parameter_id do
-        nil ->
-          case Map.has_key?(changeset.params, "parameter_id") do
-            true ->
-              changeset.params["parameter_id"]
-              |> String.to_integer()
+      case Map.has_key?(changeset.params, "parameter_id") do
+        true ->
+          changeset.params["parameter_id"]
+          |> String.to_integer()
 
-            false ->
+        false ->
+          case changeset.data.parameter_id do
+            nil ->
               changeset.source.changes.parameter_id
-          end
 
-        value ->
-          value
+            value ->
+              value
+          end
       end
 
     case Enum.find(parameters, fn p -> p.id == parameter_id end) do

@@ -37,7 +37,7 @@
           Type
         </dt>
         <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-          <%= @ship.type %>
+          <%= Ship.class_name(@ship) %>
         </dd>
       </div>
       <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
@@ -45,7 +45,7 @@
           Nation
         </dt>
         <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-          <%= @ship.nation %>
+          <%= Ship.nation_name(@ship) %>
         </dd>
       </div>
       <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
@@ -53,7 +53,7 @@
           Tier
         </dt>
         <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-          <%= @ship.tier %>
+          <%= Ship.tier_name(@ship) %>
         </dd>
       </div>
       <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
@@ -93,8 +93,6 @@
                         </div>
                       <% end %>
                       Iteration #<%= iteration.iteration %> <%= if index == length(@ship.iterations) - 1 do %>(current)<% end %>
-
-
                       <%= if user_can_update_iteration(@current_user) do %>
                         <%= link "Details", to: Routes.ship_iteration_path(StHubWeb.Endpoint, :show, @ship.id, iteration.id), class: "text-indigo-600 hover:text-indigo-900" %>
                       <% end %>

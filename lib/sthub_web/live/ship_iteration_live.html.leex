@@ -58,12 +58,19 @@
     <div class="md:grid md:grid-cols-3 md:gap-6">
       <div class="mt-5 md:mt-0 md:col-span-2">
         <div>
+          <% {has_parameter, parameter} = get_parameter(@parameters, c) %>
           <%= label c, :parameter_id, "Ship Parameter", class: "block text-sm font-medium leading-5 text-gray-700" %>
-          <%= select c,
-                  :parameter_id,
-                  @parameters |> Enum.map(fn p -> [key: p.friendly_name, value: p.id] end),
-                  class: "mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
-                  %>
+          <%= hidden_input c, :parameter_id, value: parameter.id %>
+          <input type="text" class="form-input block w-full sm:text-sm sm:leading-5" phx-keyup="search" phx-value-id="<%= c.index %>" value="<%= Map.get(@parameter_search_inputs, c.index, {parameter.id, parameter.friendly_name}) |> elem(1) %>" />
+          <%= if @parameter_search_results && Map.has_key?(@parameter_search_results, "#{c.index}") do %>
+            <div class="relative z-50">
+              <div class="absolute p-2 w-full bg-white shadow-md border-1 border-t-0">
+                <%= for {id, display_name} <- @parameter_search_results["#{c.index}"] do %>
+                  <a class="block p-1 border-t hover:bg-gray-50" phx-click="apply-search" phx-value-id="<%= c.index %>" phx-value-parameter-id="<%= id %>"><%= display_name %></a>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
           <p class="mt-2 text-sm text-gray-500">
             The changed parameter. If you can't find the correct one, choose "Other" and fill the additional information.
             <%= error_tag c, :parameter_id %>
@@ -96,7 +103,6 @@
             </label>
           </div>
         </div>
-        <% {has_parameter, parameter} = get_parameter(@parameters, c) %>
         <%= if has_parameter == :ok do %>
           <%= if parameter.needs_additional_info do %>
             <div>

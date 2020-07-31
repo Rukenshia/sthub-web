@@ -9,6 +9,7 @@ defmodule StHubWeb.ShipLive do
   alias StHub.Wows
   alias StHub.Wows.Ship
 
+
   def mount(_, %{"ship_id" => ship_id, "user_id" => user_id}, socket) do
     user =
       case user_id do
