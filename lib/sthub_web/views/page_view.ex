@@ -6,4 +6,8 @@ defmodule StHubWeb.PageView do
   def title(:index, _assigns) do
     "Dashboard"
   end
+
+  def title(_, _) do
+    "StHub"
+  end
 end

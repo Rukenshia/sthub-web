@@ -51,6 +51,12 @@ defmodule StHubWeb.Router do
     get "/logout", SessionController, :logout
 
     scope "/wows" do
+      scope "/accounts" do
+        pipe_through [:ensure_auth]
+        get "/login/callback", PageController, :login_callback
+        get "/login/:realm", PageController, :start_login
+      end
+
       scope "/ships" do
         get("/", WowsController, :index)
 

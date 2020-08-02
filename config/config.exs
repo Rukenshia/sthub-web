@@ -15,6 +15,7 @@ config :sthub,
   http_adapter: StHub.Http.Client
 
 config :sthub, StHub.Wows.Api, application: "bf7fb7e1809acb24157245221cca089b"
+config :sthub, StHub.Wows.OpenId, application: "bf7fb7e1809acb24157245221cca089b"
 
 # Configures the endpoint
 config :sthub, StHubWeb.Endpoint,
