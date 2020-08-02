@@ -161,16 +161,17 @@ defmodule StHubWeb.ShipIterationLive do
     # Update visuals
     all_search_results = Map.delete(socket.assigns.parameter_search_results, id)
 
-    changeset = socket.assigns.changeset
+    # Update changeset
+    old_changes = Map.get(socket.assigns.changeset.changes, :changes, socket.assigns.changeset.data.changes)
 
     changeset = Ecto.Changeset.put_change(
       socket.assigns.changeset,
       :changes,
       List.replace_at(
-        socket.assigns.changeset.data.changes,
+        old_changes,
         String.to_integer(id),
         ShipIterationChange.changeset(
-          Enum.at(socket.assigns.changeset.data.changes, String.to_integer(id), nil),
+          Enum.at(old_changes, String.to_integer(id), nil),
           %{"parameter_id" => "#{parameter.id}"})
       )
     )
