@@ -8,3 +8,11 @@
   @apply bg-gray-200 text-gray-800;
   cursor: pointer;
 }
+
+.bg-blur {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+}
