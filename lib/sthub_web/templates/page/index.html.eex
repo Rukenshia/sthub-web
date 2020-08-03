@@ -24,8 +24,8 @@
       <% end %>
     </ul>
   </div>
-  <div>
-    <div class="bg-gray-50 pr-4 sm:pr-6 lg:pr-8 lg:flex-shrink-0 lg:border-l lg:border-gray-200 xl:pr-0">
+  <div class="hidden md:block">
+    <div class="bg-gray-50 pr-4 sm:pr-6 lg:pr-8 lg:flex-shrink-0 xl:pr-0">
       <div class="pl-6 lg:w-80">
         <div class="pt-6 pb-2">
           <h2 class="text-sm leading-5 font-semibold">Recent changes</h2>
@@ -35,7 +35,7 @@
             <%= for change <- @recent_changes do %>
               <li class="py-4">
                 <div class="flex space-x-3">
-                  <img class="h-6 w-6" src="<%= change.ship_iteration.ship.additional_data["images"]["small"] %>" alt="">
+                  <img class="h-6" src="<%= change.ship_iteration.ship.additional_data["images"]["small"] %>" alt="">
                   <div class="flex-1 space-y-1">
                     <div class="flex items-center justify-between">
                       <h3 class="text-sm font-medium leading-5">
