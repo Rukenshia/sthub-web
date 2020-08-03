@@ -10,7 +10,7 @@ defmodule StHubWeb.SessionController do
     if maybe_user do
       redirect(conn, to: "/")
     else
-      render(conn, "new.html", changeset: changeset, action: Routes.session_path(conn, :login))
+      render(conn, "new.html")
     end
   end
 

@@ -1,12 +1,11 @@
 defmodule StHub.UserManager.User do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Argon2
 
   schema "users" do
-    field :password, :string
     field :username, :string
     field :role, :string
+    field :last_testship_check, :naive_datetime
 
     timestamps()
   end
@@ -15,16 +14,6 @@ defmodule StHub.UserManager.User do
 
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :password, :role])
-    |> validate_required([:username, :password, :role])
-    |> put_password_hash()
+    |> cast(attrs, [:id, :username, :role, :last_testship_check])
   end
-
-  defp put_password_hash(
-         %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
-       ) do
-    change(changeset, password: Argon2.hash_pwd_salt(password))
-  end
-
-  defp put_password_hash(changeset), do: changeset
 end

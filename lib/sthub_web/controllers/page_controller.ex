@@ -6,8 +6,10 @@ defmodule StHubWeb.PageController do
   alias StHub.Repo
   alias StHub.Wows.OpenId
   alias StHub.Wows.Ship
+  alias StHub.UserManager
+  alias StHub.UserManager.Guardian
 
-  def title(conn, _assigns) do
+  def title(_action, _assigns) do
     "Home"
   end
 
@@ -38,37 +40,56 @@ defmodule StHubWeb.PageController do
         "account_id" => account_id,
         "nickname" => nickname
       }) do
-    # TODO: Check if test ships are available
     # TODO: Add fields to user for Wows Info
     # TODO: Add wows info to user here
     # TODO: handle if user already has info (what to do?)
+    # TODO: Unlink accounts that no longer own testships
+    user =
+      case UserManager.get_user(String.to_integer(account_id)) do
+        nil ->
+          Logger.debug("Creating new user for account_id=#{account_id}")
+          # Create a new user
+          {:ok, user} =
+            UserManager.create_user(%{
+              "id" => String.to_integer(account_id),
+              "username" => nickname,
+              "role" => "user"
+            })
+
+          user
+
+        user ->
+          Logger.debug("Existing user logged in with account_id=#{account_id}")
+          user
+      end
+
     with :ok <- can_link_players(),
          {:ok, data} <- StHub.Wows.Api.get_player_data(realm, access_token, account_id),
-         :ok <- player_has_testships?(realm, access_token, account_id) do
-      case validate_player_data(account_id, data) do
-        :ok ->
-          conn
-          |> put_flash(:info, "Successfully authenticated as #{nickname}")
-          |> redirect(to: Routes.page_path(conn, :index))
+         :ok <- validate_player_data(account_id, data),
+         :ok <-
+           player_has_testships?(realm, access_token, account_id) do
+      {:ok, _} =
+        UserManager.update_user(user, %{"last_testship_check" => NaiveDateTime.utc_now()})
 
-        {:error, message} ->
-          Logger.warn(
-            "Could not validate player data account_id=#{account_id} message=#{message}"
-          )
-
-          conn
-          |> put_flash(:error, "Could not verify your account")
-          |> redirect(to: Routes.page_path(conn, :index))
-      end
+      conn
+      |> Guardian.Plug.sign_in(user)
+      |> put_flash(:info, "Successfully authenticated as #{nickname}")
+      |> redirect(to: Routes.page_path(conn, :index))
     else
       :no_testships_owned ->
         conn
-        |> put_flash(:error, "Sorry, you do not seem to be a tester")
+        |> Guardian.Plug.sign_in(user)
+        |> put_flash(:info, "You are logged in, but do not own any testships")
         |> redirect(to: Routes.page_path(conn, :index))
 
       :no_testships_available ->
         conn
         |> put_flash(:error, "Sorry, linking accounts is not possible at the moment")
+        |> redirect(to: Routes.page_path(conn, :index))
+
+      :no_private_data ->
+        conn
+        |> put_flash(:error, "Sorry, we could not log you in")
         |> redirect(to: Routes.page_path(conn, :index))
 
       :api_error ->
@@ -113,7 +134,7 @@ defmodule StHubWeb.PageController do
       :ok
     else
       _ ->
-        {:error, "Missing private data"}
+        :no_private_data
     end
   end
 
