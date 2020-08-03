@@ -52,9 +52,8 @@ defmodule StHubWeb.Router do
 
     scope "/wows" do
       scope "/accounts" do
-        pipe_through [:ensure_auth]
-        get "/login/callback", PageController, :login_callback
         get "/login/:realm", PageController, :start_login
+        get "/login/:realm/callback", PageController, :login_callback
       end
 
       scope "/ships" do
