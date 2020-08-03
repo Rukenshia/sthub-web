@@ -3,7 +3,7 @@ defmodule StHub.Wows.ShipIterationChange do
   import Ecto.Changeset
 
   schema "wows_ship_iteration_changes" do
-    field :ship_iteration_id, :id
+    belongs_to(:ship_iteration, StHub.Wows.ShipIteration)
     belongs_to(:parameter, StHub.Wows.ShipParameter)
     field :type, :string
     field :from, :string

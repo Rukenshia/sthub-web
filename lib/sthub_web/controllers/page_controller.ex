@@ -18,7 +18,13 @@ defmodule StHubWeb.PageController do
       from(ship in StHub.Wows.Ship, where: ship.credited_to_testers == true)
       |> Repo.all()
 
-    render(conn, "index.html", ships: ships)
+    recent_changes =
+      from(change in StHub.Wows.ShipIterationChange, order_by: [desc: :updated_at], limit: 5)
+      |> Repo.all()
+      |> Repo.preload(:parameter)
+      |> Repo.preload(ship_iteration: [:ship])
+
+    render(conn, "index.html", ships: ships, recent_changes: recent_changes)
   end
 
   def start_login(conn, %{"realm" => realm}) do

@@ -1,23 +1,70 @@
-<h2 class="text-xl">Ships currently in testing</h2>
-<ul class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-  <%= for ship <- @ships do %>
-    <li class="col-span-1 bg-white rounded-lg shadow">
-      <div class="w-full flex items-center justify-between p-6 space-x-6">
-        <div class="flex-1 truncate">
-          <div class="flex items-center space-x-3">
-            <h3 class="text-gray-900 text-sm leading-5 font-medium truncate"><%= ship.name %></h3>
+<div class="flex gap-2 -mt-12">
+  <div class="pt-6">
+    <h2 class="text-sm leading-5 font-semibold">Ships currently in testing</h2>
+    <ul class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <%= for ship <- @ships do %>
+        <li class="col-span-1 bg-white rounded-lg shadow">
+          <div class="w-full flex items-center justify-between p-6 space-x-6">
+            <div class="flex-1 truncate">
+              <div class="flex items-center space-x-3">
+                <h3 class="text-gray-900 text-sm leading-5 font-medium truncate"><%= ship.name %></h3>
+              </div>
+              <p class="mt-1 text-gray-500 text-sm leading-5 truncate">Tier <%= Ship.tier_name(ship) %> <%= Ship.nation_name(ship) %> <%= Ship.class_name(ship) %></p>
+            </div>
+            <img class="h-12 flex-shrink-0" src="<%= ship.additional_data["images"]["medium"] %>" alt="">
           </div>
-          <p class="mt-1 text-gray-500 text-sm leading-5 truncate">Tier <%= Ship.tier_name(ship) %> <%= Ship.nation_name(ship) %> <%= Ship.class_name(ship) %></p>
-        </div>
-        <img class="h-12 flex-shrink-0" src="<%= ship.additional_data["images"]["medium"] %>" alt="">
-      </div>
-      <div class="border-t border-gray-200">
-        <div class="-mt-px flex">
-          <div class="w-0 flex-1 flex">
-            <%= link "Details", to: Routes.ship_path(@conn, :show, ship), class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150" %>
+          <div class="border-t border-gray-200">
+            <div class="-mt-px flex">
+              <div class="w-0 flex-1 flex">
+                <%= link "Details", to: Routes.ship_path(@conn, :show, ship), class: "relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150" %>
+              </div>
+            </div>
           </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div>
+    <div class="bg-gray-50 pr-4 sm:pr-6 lg:pr-8 lg:flex-shrink-0 lg:border-l lg:border-gray-200 xl:pr-0">
+      <div class="pl-6 lg:w-80">
+        <div class="pt-6 pb-2">
+          <h2 class="text-sm leading-5 font-semibold">Recent changes</h2>
+        </div>
+        <div>
+          <ul class="divide-y divide-gray-200">
+            <%= for change <- @recent_changes do %>
+              <li class="py-4">
+                <div class="flex space-x-3">
+                  <img class="h-6 w-6" src="<%= change.ship_iteration.ship.additional_data["images"]["small"] %>" alt="">
+                  <div class="flex-1 space-y-1">
+                    <div class="flex items-center justify-between">
+                      <h3 class="text-sm font-medium leading-5">
+                        <%= link change.ship_iteration.ship.name, to: Routes.ship_path(@conn, :show, change.ship_iteration.ship) %>
+                      </h3>
+                      <p class="text-sm leading-5 text-gray-500 hidden lg:block"><%= change.updated_at %></p>
+                    </div>
+                    <p class="text-sm leading-5 text-gray-500">
+                      <strong>
+                        <%= if change.parameter.needs_additional_info do %>
+                          <%= change.additional_info %>
+                        <% else %>
+                          <%= change.parameter.friendly_name %>
+                        <% end %>
+                      </strong>
+                      <%= if change.from && change.to do %>
+                        changed from <%= change.from %><%= change.parameter.unit %>
+                        to <%= change.to %><%= change.parameter.unit %>
+                      <% else %>
+                        has been changed
+                      <% end %>
+                    </p>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          </ul>
         </div>
       </div>
-    </li>
-  <% end %>
-</ul>
+    </div>
+  </div>
+</div>
