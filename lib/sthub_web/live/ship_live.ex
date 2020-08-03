@@ -9,7 +9,6 @@ defmodule StHubWeb.ShipLive do
   alias StHub.Wows
   alias StHub.Wows.Ship
 
-
   def mount(_, %{"ship_id" => ship_id, "user_id" => user_id}, socket) do
     user =
       case user_id do
@@ -54,40 +53,59 @@ defmodule StHubWeb.ShipLive do
     {:noreply, socket |> assign(:ship, ship)}
   end
 
-  def user_can_change_status(%StHub.UserManager.User{role: "administrator"}) do
-    true
+  def user_can_change_status(%StHub.UserManager.User{role: role}) do
+    case role do
+      "administrator" ->
+        true
+
+      "contributor" ->
+        true
+
+      _ ->
+        false
+    end
   end
 
-  def user_can_change_status(%StHub.UserManager.User{role: "contributor"}) do
-    true
+  def user_can_create_iteration(%StHub.UserManager.User{role: role}) do
+    case role do
+      "administrator" ->
+        true
+
+      "contributor" ->
+        true
+
+      _ ->
+        false
+    end
   end
 
-  def user_can_change_status(_) do
-    false
+  def user_can_update_iteration(%StHub.UserManager.User{role: role}) do
+    case role do
+      "administrator" ->
+        true
+
+      "contributor" ->
+        true
+
+      _ ->
+        false
+    end
   end
 
-  def user_can_create_iteration(%StHub.UserManager.User{role: "administrator"}) do
-    true
-  end
+  def user_can_view_ship_statistics(%StHub.UserManager.User{role: role}) do
+    case role do
+      "administrator" ->
+        true
 
-  def user_can_create_iteration(%StHub.UserManager.User{role: "contributor"}) do
-    true
-  end
+      "contributor" ->
+        true
 
-  def user_can_create_iteration(_) do
-    false
-  end
+      "tester" ->
+        true
 
-  def user_can_update_iteration(%StHub.UserManager.User{role: "administrator"}) do
-    true
-  end
-
-  def user_can_update_iteration(%StHub.UserManager.User{role: "contributor"}) do
-    true
-  end
-
-  def user_can_update_iteration(_) do
-    false
+      _ ->
+        false
+    end
   end
 
   def change_dot_color(change) do
