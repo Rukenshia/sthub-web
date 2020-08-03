@@ -50,7 +50,8 @@ defmodule StHub.MixProject do
       {:floki, ">= 0.0.0", only: :test},
       {:con_cache, "~> 0.13"},
       {:guardian, "~> 2.0"},
-      {:argon2_elixir, "~> 2.0"}
+      {:argon2_elixir, "~> 2.0"},
+      {:timex, "~> 3.5"}
     ]
   end
 

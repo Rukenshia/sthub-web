@@ -41,7 +41,7 @@
                       <h3 class="text-sm font-medium leading-5">
                         <%= link change.ship_iteration.ship.name, to: Routes.ship_path(@conn, :show, change.ship_iteration.ship) %>
                       </h3>
-                      <p class="text-sm leading-5 text-gray-500 hidden lg:block"><%= change.updated_at %></p>
+                      <p class="text-sm leading-5 text-gray-500 hidden lg:block"><%= Timex.format!(change.updated_at, "{relative}", :relative) %></p>
                     </div>
                     <p class="text-sm leading-5 text-gray-500">
                       <strong>
