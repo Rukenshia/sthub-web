@@ -40,10 +40,6 @@ defmodule StHubWeb.PageController do
         "account_id" => account_id,
         "nickname" => nickname
       }) do
-    # TODO: Add fields to user for Wows Info
-    # TODO: Add wows info to user here
-    # TODO: handle if user already has info (what to do?)
-    # TODO: Unlink accounts that no longer own testships
     user =
       case UserManager.get_user(String.to_integer(account_id)) do
         nil ->
@@ -77,6 +73,24 @@ defmodule StHubWeb.PageController do
       |> redirect(to: Routes.page_path(conn, :index))
     else
       :no_testships_owned ->
+        user =
+          cond do
+            user.role == "administrator" || user.role == "contributor" ->
+              Logger.warn(
+                "Skipping downgrade of account_id=#{user.id} because they are an #{user.role}"
+              )
+
+              user
+
+            true ->
+              Logger.debug("Downgrading account_id=#{user.id} back to user")
+
+              {:ok, user} =
+                UserManager.update_user(user, %{"last_testship_check" => nil, "role" => "user"})
+
+              user
+          end
+
         conn
         |> Guardian.Plug.sign_in(user)
         |> put_flash(:info, "You are logged in, but do not own any testships")
