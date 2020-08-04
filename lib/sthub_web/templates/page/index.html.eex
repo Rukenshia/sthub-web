@@ -2,6 +2,13 @@
   <div class="pt-6">
     <h2 class="text-sm leading-5 font-semibold">Ships currently in testing</h2>
     <ul class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <%= if length(@ships) == 0 do %>
+        <li class="col-span-1 sm:col-span-2 text-sm text-gray-500">
+          <div class="whitespace-no-wrap">
+            It looks like there aren't any ships being tested on the live server right now
+          </div>
+        </li>
+      <% end %>
       <%= for ship <- @ships do %>
         <li class="col-span-1 bg-white rounded-lg shadow">
           <div class="w-full flex items-center justify-between p-6 space-x-6">
