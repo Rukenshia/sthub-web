@@ -66,6 +66,10 @@ defmodule StHubWeb.ShipLive do
     end
   end
 
+  def user_can_change_status(_) do
+    false
+  end
+
   def user_can_create_iteration(%StHub.UserManager.User{role: role}) do
     case role do
       "administrator" ->
@@ -79,6 +83,10 @@ defmodule StHubWeb.ShipLive do
     end
   end
 
+  def user_can_create_iteration(_) do
+    false
+  end
+
   def user_can_update_iteration(%StHub.UserManager.User{role: role}) do
     case role do
       "administrator" ->
@@ -90,6 +98,10 @@ defmodule StHubWeb.ShipLive do
       _ ->
         false
     end
+  end
+
+  def user_can_update_iteration(_) do
+    false
   end
 
   def user_can_view_ship_statistics(%StHub.UserManager.User{role: role}) do
@@ -106,6 +118,10 @@ defmodule StHubWeb.ShipLive do
       _ ->
         false
     end
+  end
+
+  def user_can_view_ship_statistics(_) do
+    false
   end
 
   def change_dot_color(change) do
