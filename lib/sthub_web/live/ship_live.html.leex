@@ -2,7 +2,7 @@
 
 <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
   <div class="px-4 py-5 border-b border-gray-200 sm:px-6 max-h-80">
-    <div class="border-8 border-gray-200 border-dashed rounded-lg">
+    <div class="border-8 border-gray-200 border-dashed rounded-lg" phx-update="ignore">
       <div class="relative mx-auto overflow-hidden">
         <canvas id="placeholder-chart" class="bg-blur w-full max-h-64"></canvas>
         <div class="absolute top-0 left-0 w-full h-full bg-gray-200 opacity-50">
@@ -162,7 +162,6 @@
 </div>
 
 <script>
-setTimeout(() => {
 const ctx = document.getElementById('placeholder-chart').getContext('2d');
 const myChart = new window.Chart(ctx, {
     type: 'line',
@@ -184,5 +183,4 @@ const myChart = new window.Chart(ctx, {
         responsive: false,
     }
 });
-}, 500);
 </script>
