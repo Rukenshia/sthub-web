@@ -86,8 +86,10 @@ defmodule StHubWeb.ShipIterationLive do
   end
 
   def handle_event("save", _value, socket) do
+    changeset = %{socket.assigns.changeset | action: nil}
+
     {:ok, iteration} =
-      Repo.insert_or_update(socket.assigns.changeset,
+      Repo.insert_or_update(changeset,
         on_conflict: :replace_all,
         conflict_target: :id
       )
@@ -131,7 +133,7 @@ defmodule StHubWeb.ShipIterationLive do
       socket.assigns.ship_iteration
       |> ShipIteration.changeset(params)
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply, assign(socket, :changeset, %{changeset | action: :insert})}
   end
 
   def handle_event("search", %{"id" => id, "value" => value}, socket) do
@@ -162,19 +164,22 @@ defmodule StHubWeb.ShipIterationLive do
     all_search_results = Map.delete(socket.assigns.parameter_search_results, id)
 
     # Update changeset
-    old_changes = Map.get(socket.assigns.changeset.changes, :changes, socket.assigns.changeset.data.changes)
+    old_changes =
+      Map.get(socket.assigns.changeset.changes, :changes, socket.assigns.changeset.data.changes)
 
-    changeset = Ecto.Changeset.put_change(
-      socket.assigns.changeset,
-      :changes,
-      List.replace_at(
-        old_changes,
-        String.to_integer(id),
-        ShipIterationChange.changeset(
-          Enum.at(old_changes, String.to_integer(id), nil),
-          %{"parameter_id" => "#{parameter.id}"})
+    changeset =
+      Ecto.Changeset.put_change(
+        socket.assigns.changeset,
+        :changes,
+        List.replace_at(
+          old_changes,
+          String.to_integer(id),
+          ShipIterationChange.changeset(
+            Enum.at(old_changes, String.to_integer(id), nil),
+            %{"parameter_id" => "#{parameter.id}"}
+          )
+        )
       )
-    )
 
     all_search_inputs =
       Map.put(
@@ -182,7 +187,6 @@ defmodule StHubWeb.ShipIterationLive do
         String.to_integer(id),
         {parameter.id, parameter.friendly_name}
       )
-
 
     {:noreply,
      socket
