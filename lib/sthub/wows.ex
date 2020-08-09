@@ -16,37 +16,42 @@ defmodule StHub.Wows do
   official WoWS API into the StHub database
   """
   def update_ship_database do
-    StHub.Wows.Api.get_warships()
-    |> Map.values()
-    |> Enum.each(fn c ->
-      case Repo.get(StHub.Wows.Ship, c["ship_id"]) do
-        nil ->
-          %StHub.Wows.Ship{
-            id: c["ship_id"],
-            released: false,
-            credited_to_testers: false,
-          }
-          |> StHub.Wows.Ship.changeset(%{
-            name: c["name"],
-            nation: c["nation"],
-            tier: c["tier"],
-            type: c["type"],
-            additional_data: c
-          })
-          |> Repo.insert!()
+    :ok =
+      StHub.Wows.Api.get_warships()
+      |> Map.values()
+      |> Enum.each(fn c ->
+        case Repo.get(StHub.Wows.Ship, c["ship_id"]) do
+          nil ->
+            %StHub.Wows.Ship{
+              id: c["ship_id"],
+              released: false,
+              credited_to_testers: false
+            }
+            |> StHub.Wows.Ship.changeset(%{
+              name: c["name"],
+              nation: c["nation"],
+              tier: c["tier"],
+              type: c["type"],
+              additional_data: c
+            })
+            |> Repo.insert!()
 
-        v ->
-          v
-          |> StHub.Wows.Ship.changeset(%{
-            name: c["name"],
-            nation: c["nation"],
-            tier: c["tier"],
-            type: c["type"],
-            additional_data: c
-          })
-          |> Repo.update!()
-      end
-    end)
+          v ->
+            v
+            |> StHub.Wows.Ship.changeset(%{
+              name: c["name"],
+              nation: c["nation"],
+              tier: c["tier"],
+              type: c["type"],
+              additional_data: c
+            })
+            |> Repo.update!()
+        end
+      end)
+
+    ConCache.put(:sthub, :last_ship_update, NaiveDateTime.utc_now())
+
+    :ok
   end
 
   @doc """

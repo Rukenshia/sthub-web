@@ -17,7 +17,13 @@ defmodule StHub.Application do
       StHubWeb.Endpoint,
       # Start a worker by calling: StHub.Worker.start_link(arg)
       # {StHub.Worker, arg}
-      {ConCache, [name: :wows_api, ttl_check_interval: false]}
+      Supervisor.child_spec({ConCache, [name: :wows_api, ttl_check_interval: false]},
+        id: :concache_wows_api
+      ),
+      Supervisor.child_spec({ConCache, [name: :sthub, ttl_check_interval: false]},
+        id: :concache_sthub
+      ),
+      Supervisor.Spec.worker(StHub.Wows.BackgroundRefresh, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

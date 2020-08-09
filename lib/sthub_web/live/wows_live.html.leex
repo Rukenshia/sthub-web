@@ -20,6 +20,22 @@
         </dl>
       </div>
     </div>
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="px-4 py-5 sm:p-6">
+        <dl>
+          <dt class="text-sm leading-5 font-medium text-gray-500">
+            Last updated
+          </dt>
+          <dd class="mt-1 text-3xl leading-9 text-gray-900">
+            <%= if @last_updated != nil do %>
+              <span class="font-mono"><%= NaiveDateTime.to_iso8601(@last_updated) %></span>
+            <% else %>
+              <span class="font-mono">n/a</span>
+            <% end %>
+          </dd>
+        </dl>
+      </div>
+    </div>
   </div>
 </div>
 

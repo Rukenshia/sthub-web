@@ -25,13 +25,17 @@ defmodule StHubWeb.WowsLive do
 
     {:ok,
      socket
+     |> assign(:last_updated, ConCache.get(:sthub, :last_ship_update))
      |> assign(:current_user, user)
      |> assign(:ships, get_ships())}
   end
 
   def handle_event("update_ships", _value, socket) do
     ships = refresh_ships()
-    {:noreply, assign(socket, :ships, ships)}
+
+    {:noreply,
+     assign(socket, :ships, ships)
+     |> assign(:last_updated, ConCache.get(:sthub, :last_ship_update))}
   end
 
   defp refresh_ships() do
