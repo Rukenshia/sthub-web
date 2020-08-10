@@ -30,7 +30,7 @@ defmodule StHub.UserManager.EnsureTester do
     end
   end
 
-  def call(conn) do
+  def call(conn, _opts) do
     case Guardian.Plug.current_resource(conn) do
       nil ->
         conn

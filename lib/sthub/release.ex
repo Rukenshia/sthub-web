@@ -19,17 +19,7 @@ defmodule StHub.Release do
 
     seed_ship_parameters()
 
-    StHub.Wows.update_ship_database()
-
-    _user =
-      %StHub.UserManager.User{
-        role: "administrator"
-      }
-      |> StHub.UserManager.User.changeset(%{
-        "username" => "test",
-        "password" => "test"
-      })
-      |> Repo.insert!()
+    # StHub.Wows.update_ship_database()
   end
 
   def seed_ship_parameters() do

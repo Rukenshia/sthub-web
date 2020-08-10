@@ -22,6 +22,20 @@ defmodule StHub.Statistics do
   end
 
   @doc """
+  Returns the list of battles for a user
+
+  ## Examples
+
+      iex> list_battles(123456)
+      [%Battle{}, ...]
+
+  """
+  def list_battles(user_id) do
+    from(b in Battle, where: b.user_id == ^user_id)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single battle.
 
   Raises `Ecto.NoResultsError` if the Battle does not exist.

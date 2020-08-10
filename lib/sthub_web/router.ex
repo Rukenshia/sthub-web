@@ -17,8 +17,16 @@ defmodule StHubWeb.Router do
     plug StHub.UserManager.EnsureContributor
   end
 
+  pipeline :api_ensure_admin do
+    plug StHub.UserManager.EnsureAdministrator, %{redirect: false}
+  end
+
   pipeline :api_ensure_tester do
     plug StHub.UserManager.EnsureTester, %{redirect: false}
+  end
+
+  pipeline :api_authorize_user_id do
+    plug StHub.UserManager.AuthorizeUserId, %{redirect: false}
   end
 
   pipeline :browser do
@@ -52,10 +60,16 @@ defmodule StHubWeb.Router do
       end
 
       scope "/battles" do
-        pipe_through [:api_auth, :api_ensure_tester]
+        pipe_through [:api_auth, :api_ensure_admin]
 
         get "/", BattleController, :index
       end
+    end
+
+    scope "/users/:user_id/ships/:ship_id" do
+      pipe_through [:api_auth, :api_ensure_tester, :api_authorize_user_id]
+
+      get "/battles", BattleController, :index
     end
   end
 

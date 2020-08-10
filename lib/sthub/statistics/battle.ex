@@ -6,6 +6,8 @@ defmodule StHub.Statistics.Battle do
     # general info
     belongs_to(:user, StHub.UserManager.User)
     belongs_to(:ship, StHub.Wows.Ship)
+    belongs_to(:ship_iteration, StHub.Wows.ShipIteration)
+
     field :status, :string
     field :has_results_screen, :boolean, default: false
     field :in_division, :boolean, default: false

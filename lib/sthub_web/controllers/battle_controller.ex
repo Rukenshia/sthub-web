@@ -6,6 +6,11 @@ defmodule StHubWeb.BattleController do
 
   action_fallback StHubWeb.FallbackController
 
+  def index(conn, %{"user_id" => user_id}) do
+    battles = Statistics.list_battles(user_id)
+    render(conn, "index.json", battles: battles)
+  end
+
   def index(conn, _params) do
     battles = Statistics.list_battles()
     render(conn, "index.json", battles: battles)
