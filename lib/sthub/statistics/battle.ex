@@ -4,8 +4,8 @@ defmodule StHub.Statistics.Battle do
 
   schema "battles" do
     # general info
-    belongs_to(:user_id, StHub.UserManager.User)
-    belongs_to(:ship_id, StHub.Wows.Ship)
+    belongs_to(:user, StHub.UserManager.User)
+    belongs_to(:ship, StHub.Wows.Ship)
     field :status, :string
     field :has_results_screen, :boolean, default: false
     field :in_division, :boolean, default: false

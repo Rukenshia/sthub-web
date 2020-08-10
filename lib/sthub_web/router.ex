@@ -17,6 +17,10 @@ defmodule StHubWeb.Router do
     plug StHub.UserManager.EnsureContributor
   end
 
+  pipeline :api_ensure_tester do
+    plug StHub.UserManager.EnsureTester, %{redirect: false}
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -30,6 +34,14 @@ defmodule StHubWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :api_auth do
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug StHub.UserManager.ApiAuth
+  end
+
   scope "/api", StHubWeb do
     pipe_through :api
 
@@ -37,6 +49,12 @@ defmodule StHubWeb.Router do
       scope "/testing" do
         get "/game_version", WowsController, :api_show_wows_version
         get "/ships", ShipController, :api_index_testships
+      end
+
+      scope "/battles" do
+        pipe_through [:api_auth, :api_ensure_tester]
+
+        get "/", BattleController, :index
       end
     end
   end

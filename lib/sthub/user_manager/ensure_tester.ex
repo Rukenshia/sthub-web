@@ -1,10 +1,36 @@
-defmodule StHub.UserManager.EnsureContributor do
+defmodule StHub.UserManager.EnsureTester do
   import Plug.Conn
   alias Phoenix.Controller
 
   def init(default), do: default
 
-  def call(conn, _default) do
+  def call(conn, %{redirect: false}) do
+    case Guardian.Plug.current_resource(conn) do
+      nil ->
+        conn
+        |> send_resp(401, "no authorization present")
+        |> halt()
+
+      user ->
+        case user.role do
+          "tester" ->
+            conn
+
+          "contributor" ->
+            conn
+
+          "administrator" ->
+            conn
+
+          _ ->
+            conn
+            |> send_resp(401, "not authorized")
+            |> halt()
+        end
+    end
+  end
+
+  def call(conn) do
     case Guardian.Plug.current_resource(conn) do
       nil ->
         conn
@@ -20,7 +46,6 @@ defmodule StHub.UserManager.EnsureContributor do
           "contributor" ->
             conn
 
-          # Administrator overrides contributors
           "administrator" ->
             conn
 
